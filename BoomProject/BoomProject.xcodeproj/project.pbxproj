@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		339B67358E4DCAC275F7A423 /* libPods-BoomProject.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63458ACBD414A61E94B9DFDB /* libPods-BoomProject.a */; };
 		40F9A8DD1E3A12F3002D1219 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F9A8DC1E3A12F3002D1219 /* main.m */; };
 		40F9A8E01E3A12F3002D1219 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F9A8DF1E3A12F3002D1219 /* AppDelegate.m */; };
 		40F9A8E31E3A12F3002D1219 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F9A8E21E3A12F3002D1219 /* ViewController.m */; };
@@ -28,6 +29,9 @@
 		40F9A8EA1E3A12F3002D1219 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		40F9A8ED1E3A12F3002D1219 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		40F9A8EF1E3A12F3002D1219 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		63458ACBD414A61E94B9DFDB /* libPods-BoomProject.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BoomProject.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CAB56724C070352C068DE274 /* Pods-BoomProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BoomProject.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BoomProject/Pods-BoomProject.debug.xcconfig"; sourceTree = "<group>"; };
+		E8C5435DE152BD3259FB1A8A /* Pods-BoomProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BoomProject.release.xcconfig"; path = "Pods/Target Support Files/Pods-BoomProject/Pods-BoomProject.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				339B67358E4DCAC275F7A423 /* libPods-BoomProject.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +51,8 @@
 			children = (
 				40F9A8DA1E3A12F3002D1219 /* BoomProject */,
 				40F9A8D91E3A12F3002D1219 /* Products */,
+				CB40FB3FEE02661D8C52EEF7 /* Pods */,
+				9585A7F51FCFD800C5E81078 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -82,6 +89,23 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		9585A7F51FCFD800C5E81078 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				63458ACBD414A61E94B9DFDB /* libPods-BoomProject.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CB40FB3FEE02661D8C52EEF7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CAB56724C070352C068DE274 /* Pods-BoomProject.debug.xcconfig */,
+				E8C5435DE152BD3259FB1A8A /* Pods-BoomProject.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -89,9 +113,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 40F9A8F21E3A12F4002D1219 /* Build configuration list for PBXNativeTarget "BoomProject" */;
 			buildPhases = (
+				08C65034B78C1F576594008D /* [CP] Check Pods Manifest.lock */,
 				40F9A8D41E3A12F3002D1219 /* Sources */,
 				40F9A8D51E3A12F3002D1219 /* Frameworks */,
 				40F9A8D61E3A12F3002D1219 /* Resources */,
+				99C45854603DA6D1B66C8FCD /* [CP] Embed Pods Frameworks */,
+				96B479017F7737782A6C03A0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -148,6 +175,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		08C65034B78C1F576594008D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		96B479017F7737782A6C03A0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BoomProject/Pods-BoomProject-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		99C45854603DA6D1B66C8FCD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BoomProject/Pods-BoomProject-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		40F9A8D41E3A12F3002D1219 /* Sources */ = {
@@ -273,6 +348,7 @@
 		};
 		40F9A8F31E3A12F4002D1219 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CAB56724C070352C068DE274 /* Pods-BoomProject.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 49W3Q6WK7W;
@@ -285,6 +361,7 @@
 		};
 		40F9A8F41E3A12F4002D1219 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8C5435DE152BD3259FB1A8A /* Pods-BoomProject.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 49W3Q6WK7W;
