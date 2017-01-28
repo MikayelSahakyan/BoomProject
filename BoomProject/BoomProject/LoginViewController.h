@@ -1,15 +1,13 @@
 //
-//  ViewController.h
+//  LoginViewController.h
 //  BoomProject
 //
-//  Created by User ACA on 1/26/17.
+//  Created by User ACA on 1/28/17.
 //  Copyright © 2017 Mikayel Sahakyan. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface LoginViewController : UIViewController
 
 @end
-
