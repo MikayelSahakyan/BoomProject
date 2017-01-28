@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		339B67358E4DCAC275F7A423 /* libPods-BoomProject.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63458ACBD414A61E94B9DFDB /* libPods-BoomProject.a */; };
 		40A8BF5B1E3D287F00DD195B /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40A8BF5A1E3D287F00DD195B /* LoginViewController.m */; };
+		40A8BF5E1E3D3F9700DD195B /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40A8BF5D1E3D3F9700DD195B /* SettingsViewController.m */; };
+		40A8BF611E3D4F9800DD195B /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40A8BF601E3D4F9800DD195B /* InfoViewController.m */; };
 		40F9A8DD1E3A12F3002D1219 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F9A8DC1E3A12F3002D1219 /* main.m */; };
 		40F9A8E01E3A12F3002D1219 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F9A8DF1E3A12F3002D1219 /* AppDelegate.m */; };
 		40F9A8E61E3A12F3002D1219 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40F9A8E41E3A12F3002D1219 /* Main.storyboard */; };
@@ -20,6 +22,10 @@
 /* Begin PBXFileReference section */
 		40A8BF591E3D287F00DD195B /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		40A8BF5A1E3D287F00DD195B /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		40A8BF5C1E3D3F9700DD195B /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		40A8BF5D1E3D3F9700DD195B /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		40A8BF5F1E3D4F9800DD195B /* InfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoViewController.h; sourceTree = "<group>"; };
+		40A8BF601E3D4F9800DD195B /* InfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoViewController.m; sourceTree = "<group>"; };
 		40F9A8D81E3A12F3002D1219 /* BoomProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoomProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40F9A8DC1E3A12F3002D1219 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		40F9A8DE1E3A12F3002D1219 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -71,6 +77,10 @@
 				40F9A8DF1E3A12F3002D1219 /* AppDelegate.m */,
 				40A8BF591E3D287F00DD195B /* LoginViewController.h */,
 				40A8BF5A1E3D287F00DD195B /* LoginViewController.m */,
+				40A8BF5C1E3D3F9700DD195B /* SettingsViewController.h */,
+				40A8BF5D1E3D3F9700DD195B /* SettingsViewController.m */,
+				40A8BF5F1E3D4F9800DD195B /* InfoViewController.h */,
+				40A8BF601E3D4F9800DD195B /* InfoViewController.m */,
 				40F9A8E41E3A12F3002D1219 /* Main.storyboard */,
 				40F9A8EA1E3A12F3002D1219 /* Assets.xcassets */,
 				40F9A8EC1E3A12F3002D1219 /* LaunchScreen.storyboard */,
@@ -231,6 +241,8 @@
 			files = (
 				40F9A8E91E3A12F3002D1219 /* BoomProject.xcdatamodeld in Sources */,
 				40F9A8E01E3A12F3002D1219 /* AppDelegate.m in Sources */,
+				40A8BF611E3D4F9800DD195B /* InfoViewController.m in Sources */,
+				40A8BF5E1E3D3F9700DD195B /* SettingsViewController.m in Sources */,
 				40F9A8DD1E3A12F3002D1219 /* main.m in Sources */,
 				40A8BF5B1E3D287F00DD195B /* LoginViewController.m in Sources */,
 			);
