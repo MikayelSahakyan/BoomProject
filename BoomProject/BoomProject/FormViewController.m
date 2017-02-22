@@ -8,10 +8,14 @@
 
 #import "FormViewController.h"
 #import "FormTableViewCell.h"
+#import "ServiceManager.h"
+#import "FormModel.h"
 
 @interface FormViewController ()
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
+@property (strong, nonatomic) NSMutableArray *formsArray;
 
 @end
 
@@ -26,21 +30,54 @@
     self.refreshControl.tintColor = [UIColor colorWithRed:0 green:0.588 blue:0.875 alpha:1];
     [self.tableView addSubview:self.refreshControl];
     [self.refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
+    self.formsArray = [NSMutableArray array];
     
+    [self getFormsFromServer];
+}
+
+#pragma mark - API
+
+- (void)getFormsFromServer {
+    [[ServiceManager sharedManager] loginWithUserToken:@"david"
+                                             onSuccess:^(NSArray *forms) {
+                                                 
+                                                 [self.formsArray addObjectsFromArray:forms];
+                                                 [self.tableView reloadData];
+                                                 /*
+                                                  NSMutableArray *newPaths = [NSMutableArray array];
+                                                  for (NSInteger i = (NSInteger)[self.formsArray count] - (NSInteger)[forms count]; i < [self.formsArray count]; i++) {
+                                                  [newPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+                                                  }
+                                                  
+                                                  [self.tableView beginUpdates];
+                                                  [self.tableView insertRowsAtIndexPaths:newPaths withRowAnimation:UITableViewRowAnimationTop];
+                                                  [self.tableView endUpdates];
+                                                  */
+                                             }
+                                             onFailure:^(NSError *error, NSInteger statusCode) {
+                                                 NSLog(@"error = %@, code = %ld", [error localizedDescription], statusCode);
+                                             }];
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 6;
+    return [self.formsArray count] + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     FormTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
-    if (cell) {
-        NSLog(@"cell reused");
+    if (indexPath.row == [self.formsArray count]) {
+        cell.formLabel.text = @"LOAD MORE...";
+    } else {
+        
+        FormModel *form = [self.formsArray objectAtIndex:indexPath.row];
+        
+        //cell.formLabel.text = [self.formsArray objectAtIndex:indexPath.row];
+        
+        cell.formLabel.text = [NSString stringWithFormat:@"%@", form.name];
     }
     return cell;
 }
