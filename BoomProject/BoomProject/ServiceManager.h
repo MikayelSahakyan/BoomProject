@@ -16,4 +16,11 @@
 - (void)loginWithUserToken:(NSString *)userToken
                 onSuccess:(void (^)(NSArray *forms))success
                  onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
+
+- (void)getEntriesWithUserToken:(NSString *)userToken
+                      andFormID:(NSString *)formID
+                    lastEntryID:(NSString *)entryID
+                      onSuccess:(void (^)(NSArray *entries))success
+                      onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
+
 @end

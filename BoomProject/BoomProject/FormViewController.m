@@ -8,6 +8,7 @@
 
 #import "FormViewController.h"
 #import "FormTableViewCell.h"
+#import "EntriesViewController.h"
 #import "ServiceManager.h"
 #import "FormModel.h"
 
@@ -16,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 @property (strong, nonatomic) NSMutableArray *formsArray;
+@property (strong, nonatomic) FormModel *form;
 
 @end
 
@@ -67,19 +69,26 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    FormTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    FormTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FormCell" forIndexPath:indexPath];
     
     if (indexPath.row == [self.formsArray count]) {
         cell.formLabel.text = @"LOAD MORE...";
     } else {
         
         FormModel *form = [self.formsArray objectAtIndex:indexPath.row];
-        
-        //cell.formLabel.text = [self.formsArray objectAtIndex:indexPath.row];
-        
+                
         cell.formLabel.text = [NSString stringWithFormat:@"%@", form.name];
     }
     return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    self.form = [self.formsArray objectAtIndex:indexPath.row];
+    
+    [self performSegueWithIdentifier:@"Entries" sender:self];
 }
 
 #pragma mark - IBAction
@@ -123,6 +132,15 @@
 }
 
 #pragma mark - 
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    if ([[segue identifier] isEqualToString:@"Entries"]) {
+        EntriesViewController *entryVC = [segue destinationViewController];
+        [entryVC setFormID:self.form.ID];
+        [entryVC setFormName:self.form.name];
+    }
+}
 
 - (void)refreshTable {
     [self.refreshControl endRefreshing];

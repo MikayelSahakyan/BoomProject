@@ -8,9 +8,11 @@
 
 #import "ServiceManager.h"
 #import "FormModel.h"
+#import "EntryModel.h"
 
 static NSString *const kLoginFirebaseToken = @"fDWS5Jv-mdc:APA91bG-RuNhAp5-NZGm47MCFTdHYVZ0idkCwa2vItyEvncAp7wVOVXxYA_q2s1Q8rElfqzUa3UsshCS6lohoCBEKzaanSWWR1XYOF3qIWbz-qZxZGg12VyLMnjgaLG2IdWlIymj17h0";
-static NSString *const kHostURL = @"http://api.boomform.com/form/settings";
+static NSString *const kHostSettingsURL = @"http://api.boomform.com/form/settings";
+static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
 
 @implementation ServiceManager
 
@@ -30,7 +32,7 @@ static NSString *const kHostURL = @"http://api.boomform.com/form/settings";
 }
 
 - (void)loginWithUserToken:(NSString *)userToken
-                 onSuccess:(void (^)(NSArray *))success
+                 onSuccess:(void (^)(NSArray *forms))success
                  onFailure:(void (^)(NSError *, NSInteger))failure {
     
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -40,23 +42,77 @@ static NSString *const kHostURL = @"http://api.boomform.com/form/settings";
                             @"1",                   @"sound",
                             nil];
     
-    [self POST:kHostURL
+    [self POST:kHostSettingsURL
     parameters:params
       progress:nil
        success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
            NSLog(@"JSON:%@", responseObject);
            
-           NSArray *formDictionaries = responseObject;
+           NSArray *dictsArray = responseObject;
                           
-           NSMutableArray *forms = [NSMutableArray array];
+           NSMutableArray *objectsArray = [NSMutableArray array];
                           
-           for (NSDictionary *dictionary in formDictionaries) {
+           for (NSDictionary *dictionary in dictsArray) {
                               
                FormModel *form = [[FormModel alloc] initWithResponse:dictionary];
-               [forms addObject:form];
+               [objectsArray addObject:form];
            }
            if (success) {
-               success(forms);
+               success(objectsArray);
+           }
+       } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+           
+           NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
+           NSInteger statusCode = [response statusCode];
+           
+           NSLog(@"Error:%@", error);
+           
+           if (failure) {
+               failure(error, statusCode);
+           }
+       }];
+}
+
+- (void)getEntriesWithUserToken:(NSString *)userToken
+                      andFormID:(NSString *)formID
+                    lastEntryID:(NSString *)entryID
+                      onSuccess:(void (^)(NSArray *entries))success
+                      onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
+    
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            userToken,              @"user_token",
+                            formID,                 @"form_id",
+                            entryID,                @"entry_id",
+                            nil];
+    
+    [self GET:kHostEntryURL
+    parameters:params
+      progress:nil
+       success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+           NSLog(@"JSON:%@", responseObject);
+           
+           NSArray *arraysArray = responseObject;
+           
+           //NSMutableArray *objectsArray = [NSMutableArray array];
+           
+           NSMutableArray *entriesArray = [NSMutableArray array];
+           
+           for (NSInteger i = 0; i < [arraysArray count]; i++) {
+               
+               NSMutableArray *objectsArray = [NSMutableArray array];
+
+               NSArray *dictsArray = [arraysArray objectAtIndex:i];
+                              
+               for (NSDictionary *dictionary in dictsArray) {
+                   
+                   EntryModel *entry = [[EntryModel alloc] initWithResponse:dictionary];
+                   [objectsArray addObject:entry];
+               }
+               [entriesArray addObject:objectsArray];
+           }
+           
+           if (success) {
+               success(entriesArray);
            }
        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
            
