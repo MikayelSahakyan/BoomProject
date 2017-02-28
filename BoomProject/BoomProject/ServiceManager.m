@@ -7,8 +7,8 @@
 //
 
 #import "ServiceManager.h"
-#import "FormModel.h"
-#import "EntryModel.h"
+#import "Form.h"
+#import "Entry.h"
 
 static NSString *const kLoginFirebaseToken = @"fDWS5Jv-mdc:APA91bG-RuNhAp5-NZGm47MCFTdHYVZ0idkCwa2vItyEvncAp7wVOVXxYA_q2s1Q8rElfqzUa3UsshCS6lohoCBEKzaanSWWR1XYOF3qIWbz-qZxZGg12VyLMnjgaLG2IdWlIymj17h0";
 static NSString *const kHostSettingsURL = @"http://api.boomform.com/form/settings";
@@ -17,9 +17,7 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
 @implementation ServiceManager
 
 + (ServiceManager *)sharedManager {
-    
     static ServiceManager *sharedObject = nil;
-    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedObject = [[ServiceManager alloc] init];
@@ -49,24 +47,19 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
            NSLog(@"JSON:%@", responseObject);
            
            NSArray *dictsArray = responseObject;
-                          
            NSMutableArray *objectsArray = [NSMutableArray array];
-                          
+           
            for (NSDictionary *dictionary in dictsArray) {
-                              
-               FormModel *form = [[FormModel alloc] initWithResponse:dictionary];
+               Form *form = [[Form alloc] initWithResponse:dictionary];
                [objectsArray addObject:form];
            }
            if (success) {
                success(objectsArray);
            }
        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-           
            NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
            NSInteger statusCode = [response statusCode];
-           
            NSLog(@"Error:%@", error);
-           
            if (failure) {
                failure(error, statusCode);
            }
@@ -90,37 +83,25 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
       progress:nil
        success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
            NSLog(@"JSON:%@", responseObject);
-           
            NSArray *arraysArray = responseObject;
-           
-           //NSMutableArray *objectsArray = [NSMutableArray array];
-           
            NSMutableArray *entriesArray = [NSMutableArray array];
            
-           for (NSInteger i = 0; i < [arraysArray count]; i++) {
-               
+           for (NSArray *dictsArray in arraysArray) {
                NSMutableArray *objectsArray = [NSMutableArray array];
-
-               NSArray *dictsArray = [arraysArray objectAtIndex:i];
-                              
+               
                for (NSDictionary *dictionary in dictsArray) {
-                   
-                   EntryModel *entry = [[EntryModel alloc] initWithResponse:dictionary];
+                   Entry *entry = [[Entry alloc] initWithResponse:dictionary];
                    [objectsArray addObject:entry];
                }
                [entriesArray addObject:objectsArray];
            }
-           
            if (success) {
                success(entriesArray);
            }
        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-           
            NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
            NSInteger statusCode = [response statusCode];
-           
            NSLog(@"Error:%@", error);
-           
            if (failure) {
                failure(error, statusCode);
            }

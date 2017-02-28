@@ -1,21 +1,18 @@
 //
-//  FormModel.m
+//  Form.m
 //  BoomProject
 //
-//  Created by User ACA on 2/20/17.
+//  Created by User ACA on 2/28/17.
 //  Copyright © 2017 Mikayel Sahakyan. All rights reserved.
 //
 
-#import "FormModel.h"
+#import "Form.h"
 
-@implementation FormModel
+@implementation Form
 
 - (instancetype)initWithResponse:(NSDictionary *)responseObject {
-    
-    self = [super init];
+    self = [super initWithResponse:responseObject];
     if (self) {
-        
-        self.ID = [responseObject objectForKey:@"id"];
         self.name = [responseObject objectForKey:@"name"];
     }
     return self;

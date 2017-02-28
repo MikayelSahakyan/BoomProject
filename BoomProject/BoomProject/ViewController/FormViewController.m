@@ -10,14 +10,14 @@
 #import "FormTableViewCell.h"
 #import "EntriesViewController.h"
 #import "ServiceManager.h"
-#import "FormModel.h"
+#import "Form.h"
 
 @interface FormViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 @property (strong, nonatomic) NSMutableArray *formsArray;
-@property (strong, nonatomic) FormModel *form;
+@property (strong, nonatomic) Form *form;
 
 @end
 
@@ -42,19 +42,8 @@
 - (void)getFormsFromServer {
     [[ServiceManager sharedManager] loginWithUserToken:@"david"
                                              onSuccess:^(NSArray *forms) {
-                                                 
                                                  [self.formsArray addObjectsFromArray:forms];
                                                  [self.tableView reloadData];
-                                                 /*
-                                                  NSMutableArray *newPaths = [NSMutableArray array];
-                                                  for (NSInteger i = (NSInteger)[self.formsArray count] - (NSInteger)[forms count]; i < [self.formsArray count]; i++) {
-                                                  [newPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
-                                                  }
-                                                  
-                                                  [self.tableView beginUpdates];
-                                                  [self.tableView insertRowsAtIndexPaths:newPaths withRowAnimation:UITableViewRowAnimationTop];
-                                                  [self.tableView endUpdates];
-                                                  */
                                              }
                                              onFailure:^(NSError *error, NSInteger statusCode) {
                                                  NSLog(@"error = %@, code = %ld", [error localizedDescription], statusCode);
@@ -64,30 +53,22 @@
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.formsArray count] + 1;
+    return [self.formsArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     FormTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FormCell" forIndexPath:indexPath];
+    Form *form = [self.formsArray objectAtIndex:indexPath.row];
+    cell.formLabel.text = [NSString stringWithFormat:@"%@", form.name];
     
-    if (indexPath.row == [self.formsArray count]) {
-        cell.formLabel.text = @"LOAD MORE...";
-    } else {
-        
-        FormModel *form = [self.formsArray objectAtIndex:indexPath.row];
-                
-        cell.formLabel.text = [NSString stringWithFormat:@"%@", form.name];
-    }
     return cell;
 }
 
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     self.form = [self.formsArray objectAtIndex:indexPath.row];
-    
     [self performSegueWithIdentifier:@"Entries" sender:self];
 }
 
@@ -102,26 +83,23 @@
                                                     handler:^(UIAlertAction * _Nonnull action) {
                                                         UIViewController *settingsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"settings"];
                                                         [self.navigationController pushViewController:settingsVC animated:YES];
-    }];
-    
+                                                    }];
     UIAlertAction *button1 = [UIAlertAction actionWithTitle:@"About"
                                                       style:UIAlertActionStyleDefault
                                                     handler:^(UIAlertAction * _Nonnull action) {
                                                         UIViewController *infoVC = [self.storyboard instantiateViewControllerWithIdentifier:@"info"];
                                                         [self.navigationController pushViewController:infoVC animated:YES];
-    }];
-    
+                                                    }];
     UIAlertAction *button2 = [UIAlertAction actionWithTitle:@"Log Out"
                                                       style:UIAlertActionStyleDestructive
                                                     handler:^(UIAlertAction * _Nonnull action) {
                                                         [self.navigationController popToRootViewControllerAnimated:YES];
-    }];
-    
+                                                    }];
     UIAlertAction *button3 = [UIAlertAction actionWithTitle:@"Cancle"
                                                       style:UIAlertActionStyleCancel
                                                     handler:^(UIAlertAction * _Nonnull action) {
-        //
-    }];
+                                                        //
+                                                    }];
     
     [actionSheet addAction:button0];
     [actionSheet addAction:button1];
