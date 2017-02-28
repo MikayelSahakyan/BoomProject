@@ -33,12 +33,10 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
                  onSuccess:(void (^)(NSArray *forms))success
                  onFailure:(void (^)(NSError *, NSInteger))failure {
     
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
-                            userToken,              @"user_token",
-                            kLoginFirebaseToken,    @"firebase_token",
-                            @"1",                   @"notification",
-                            @"1",                   @"sound",
-                            nil];
+    NSDictionary *params = @{@"user_token"     : userToken,
+                             @"firebase_token" : kLoginFirebaseToken,
+                             @"notification"   : @"1",
+                             @"sound"          : @"1"};
     
     [self POST:kHostSettingsURL
     parameters:params
@@ -72,12 +70,9 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
                       onSuccess:(void (^)(NSArray *entries))success
                       onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
     
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
-                            userToken,              @"user_token",
-                            formID,                 @"form_id",
-                            entryID,                @"entry_id",
-                            nil];
-    
+    NSDictionary *params = @{@"user_token" : userToken,
+                             @"form_id"    : formID,
+                             @"entry_id"   : entryID};
     [self GET:kHostEntryURL
     parameters:params
       progress:nil

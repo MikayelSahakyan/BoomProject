@@ -85,18 +85,18 @@
 		4005F2B01E65F6D80022BAB2 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				4005F2B11E65F6D80022BAB2 /* EntriesViewController.h */,
-				4005F2B21E65F6D80022BAB2 /* EntriesViewController.m */,
-				4005F2B31E65F6D80022BAB2 /* EntryViewController.h */,
-				4005F2B41E65F6D80022BAB2 /* EntryViewController.m */,
-				4005F2B51E65F6D80022BAB2 /* FormViewController.h */,
-				4005F2B61E65F6D80022BAB2 /* FormViewController.m */,
-				4005F2B71E65F6D80022BAB2 /* InfoViewController.h */,
-				4005F2B81E65F6D80022BAB2 /* InfoViewController.m */,
 				4005F2B91E65F6D80022BAB2 /* LoginViewController.h */,
 				4005F2BA1E65F6D80022BAB2 /* LoginViewController.m */,
 				4005F2BB1E65F6D80022BAB2 /* SettingsViewController.h */,
 				4005F2BC1E65F6D80022BAB2 /* SettingsViewController.m */,
+				4005F2B71E65F6D80022BAB2 /* InfoViewController.h */,
+				4005F2B81E65F6D80022BAB2 /* InfoViewController.m */,
+				4005F2B51E65F6D80022BAB2 /* FormViewController.h */,
+				4005F2B61E65F6D80022BAB2 /* FormViewController.m */,
+				4005F2B11E65F6D80022BAB2 /* EntriesViewController.h */,
+				4005F2B21E65F6D80022BAB2 /* EntriesViewController.m */,
+				4005F2B31E65F6D80022BAB2 /* EntryViewController.h */,
+				4005F2B41E65F6D80022BAB2 /* EntryViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -104,12 +104,12 @@
 		4005F2C31E65F6F40022BAB2 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				4005F2C81E65F6F40022BAB2 /* FormTableViewCell.h */,
+				4005F2C91E65F6F40022BAB2 /* FormTableViewCell.m */,
 				4005F2C41E65F6F40022BAB2 /* EntriesTableViewCell.h */,
 				4005F2C51E65F6F40022BAB2 /* EntriesTableViewCell.m */,
 				4005F2C61E65F6F40022BAB2 /* EntryTableViewCell.h */,
 				4005F2C71E65F6F40022BAB2 /* EntryTableViewCell.m */,
-				4005F2C81E65F6F40022BAB2 /* FormTableViewCell.h */,
-				4005F2C91E65F6F40022BAB2 /* FormTableViewCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -117,12 +117,12 @@
 		4005F2CD1E65F7010022BAB2 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4005F2CE1E65F7010022BAB2 /* Entry.h */,
-				4005F2CF1E65F7010022BAB2 /* Entry.m */,
-				4005F2D01E65F7010022BAB2 /* Form.h */,
-				4005F2D11E65F7010022BAB2 /* Form.m */,
 				4005F2D21E65F7010022BAB2 /* ServiceObject.h */,
 				4005F2D31E65F7010022BAB2 /* ServiceObject.m */,
+				4005F2D01E65F7010022BAB2 /* Form.h */,
+				4005F2D11E65F7010022BAB2 /* Form.m */,
+				4005F2CE1E65F7010022BAB2 /* Entry.h */,
+				4005F2CF1E65F7010022BAB2 /* Entry.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";

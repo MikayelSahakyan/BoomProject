@@ -81,7 +81,8 @@
         
         switch (i) {
             case 0:
-                cell.dateLabel.text = [NSString stringWithFormat:@"%@", entry.date];
+                cell.dateLabel.text = [NSString stringWithFormat:@"%@",
+                                       [Entry relativeDateStringForDate:[self changeStringToDate:entry.date]]];
                 break;
                 case 1:
                 cell.nameLabel.text = [NSString stringWithFormat:@"%@:", entry.key];
@@ -169,6 +170,16 @@
     }
     [self.refreshControl endRefreshing];
     [self.tableView reloadData];
+}
+
+- (NSDate *)changeStringToDate:(NSString *)date {
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate *entryDate = [NSDate date];
+    entryDate = [dateFormatter dateFromString:date];
+    
+    return entryDate;
 }
 
 @end

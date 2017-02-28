@@ -15,4 +15,6 @@
 @property (strong, nonatomic) NSString *date;
 @property (strong, nonatomic) NSString *rowID;
 
++ (NSString *)relativeDateStringForDate:(NSDate *)date;
+
 @end
