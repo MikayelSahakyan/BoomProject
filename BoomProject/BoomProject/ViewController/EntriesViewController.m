@@ -66,6 +66,17 @@
                                                   }];
 }
 
+- (void)removeEntry:(Entry *)entry {
+    [[ServiceManager sharedManager] removeEntryWithUserToken:@"david"
+                                           andRemovedEntryID:entry.ID
+                                                   onSuccess:^(id result) {
+                                                       //
+                                                   }
+                                                   onFailure:^(NSError *error, NSInteger statusCode) {
+                                                       //
+                                                   }];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -101,6 +112,20 @@
         }
     }
     return cell;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        Entry *removedEntry = [[self.entriesArray objectAtIndex:indexPath.row] objectAtIndex:0];
+        [self removeEntry:removedEntry];
+        [self.entriesArray removeObjectAtIndex:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView reloadData];
+    }
 }
 
 #pragma mark - UITableViewDelegate

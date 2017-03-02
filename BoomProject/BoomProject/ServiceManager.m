@@ -103,4 +103,31 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
        }];
 }
 
+- (void)removeEntryWithUserToken:(NSString *)userToken
+               andRemovedEntryID:(NSString *)entryID
+                       onSuccess:(void (^)(id result))success
+                       onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
+    
+    NSDictionary *params = @{@"user_token"     : userToken,
+                             @"firebase_token" : kLoginFirebaseToken,
+                             @"entry_remove"   : entryID};
+    [self POST:kHostSettingsURL
+    parameters:params
+      progress:nil
+       success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+           NSLog(@"JSON:%@", responseObject);
+           if (success) {
+               success(responseObject);
+           }
+       }
+       failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+           NSHTTPURLResponse *respone = (NSHTTPURLResponse *)task.response;
+           NSInteger statusCode = [respone statusCode];
+           NSLog(@"Error:%@", error);
+           if (failure) {
+               failure(error, statusCode);
+           }
+       }];
+}
+
 @end

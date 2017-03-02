@@ -23,4 +23,9 @@
                       onSuccess:(void (^)(NSArray *entries))success
                       onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
 
+- (void)removeEntryWithUserToken:(NSString *)userToken
+               andRemovedEntryID:(NSString *)entryID
+                       onSuccess:(void (^)(id result))success
+                       onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
+
 @end
