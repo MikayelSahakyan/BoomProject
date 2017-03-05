@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EntriesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface EntriesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) NSString *formID;
 @property (strong, nonatomic) NSString *formName;

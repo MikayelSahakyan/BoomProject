@@ -14,7 +14,11 @@
 @interface EntryViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) UIRefreshControl *refreshControl;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *composeBarButtonItem;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *saveBarButtonItem;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *cancleBarButtonItem;
+@property (strong, nonatomic) NSMutableArray *toolbarButtons;
+@property (assign, nonatomic) BOOL isEditable;
 
 @end
 
@@ -26,10 +30,12 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationItem.title = self.entryDate;
     
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.tintColor = [UIColor colorWithRed:0 green:0.588 blue:0.875 alpha:1];
-    [self.tableView addSubview:self.refreshControl];
-    [self.refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
+    self.toolbarButtons = [self.navigationItem.rightBarButtonItems mutableCopy];
+    [self.toolbarButtons removeObject:self.saveBarButtonItem];
+    [self.toolbarButtons removeObject:self.cancleBarButtonItem];
+    [self.navigationItem setRightBarButtonItems:self.toolbarButtons animated:YES];
+    
+    self.isEditable = NO;
 }
 
 #pragma mark - API
@@ -45,9 +51,20 @@
     EntryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EntryCell" forIndexPath:indexPath];
     Entry *entry = [self.entryArray objectAtIndex:indexPath.row];
     cell.keyLabel.text = [NSString stringWithFormat:@"%@:", entry.key];
-    cell.valueLabel.text = [NSString stringWithFormat:@"%@", entry.value];
+    cell.valueTextView.text = [NSString stringWithFormat:@"%@", entry.value];
     
+    if (self.isEditable) {
+        cell.valueTextView.editable = YES;
+        [cell.valueTextView setTextColor:[UIColor grayColor]];
+    } else {
+        cell.valueTextView.editable = NO;
+        [cell.valueTextView setTextColor:[UIColor blackColor]];
+    }
     return cell;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
 }
 
 #pragma mark - UITableViewDelegate
@@ -64,45 +81,41 @@
 
 #pragma mark - IBAction
 
-- (IBAction)actionSheetButtonPressed:(id)sender {
-    
-    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    UIAlertAction *button0 = [UIAlertAction actionWithTitle:@"Settings"
-                                                      style:UIAlertActionStyleDefault
-                                                    handler:^(UIAlertAction * _Nonnull action) {
-                                                        UIViewController *settingsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"settings"];
-                                                        [self.navigationController pushViewController:settingsVC animated:YES];
-                                                    }];
-    UIAlertAction *button1 = [UIAlertAction actionWithTitle:@"About"
-                                                      style:UIAlertActionStyleDefault
-                                                    handler:^(UIAlertAction * _Nonnull action) {
-                                                        UIViewController *infoVC = [self.storyboard instantiateViewControllerWithIdentifier:@"info"];
-                                                        [self.navigationController pushViewController:infoVC animated:YES];
-                                                    }];
-    UIAlertAction *button2 = [UIAlertAction actionWithTitle:@"Log Out"
-                                                      style:UIAlertActionStyleDestructive
-                                                    handler:^(UIAlertAction * _Nonnull action) {
-                                                        [self.navigationController popToRootViewControllerAnimated:YES];
-                                                    }];
-    UIAlertAction *button3 = [UIAlertAction actionWithTitle:@"Cancle"
-                                                      style:UIAlertActionStyleCancel
-                                                    handler:^(UIAlertAction * _Nonnull action) {
-                                                        //
-                                                    }];
-    [actionSheet addAction:button0];
-    [actionSheet addAction:button1];
-    [actionSheet addAction:button2];
-    [actionSheet addAction:button3];
-    
-    [self presentViewController:actionSheet animated:YES completion:nil];
+- (IBAction)composeButtonPressed:(id)sender {
+    [self hideComposeButton];
+    self.isEditable = YES;
+    [self.tableView reloadData];
+}
+
+- (IBAction)saveButtonPressed:(id)sender {
+    [self showComposeButton];
+    self.isEditable = NO;
+    [self.tableView reloadData];
+}
+
+- (IBAction)cancleButtonPressed:(id)sender {
+    [self showComposeButton];
+    self.isEditable = NO;
+    [self.tableView reloadData];
 }
 
 #pragma mark -
 
-- (void)refreshTable {
-    [self.refreshControl endRefreshing];
-    [self.tableView reloadData];
+- (void)hideComposeButton {
+    if (!([self.toolbarButtons containsObject:self.saveBarButtonItem] && [self.toolbarButtons containsObject:self.cancleBarButtonItem])) {
+        [self.toolbarButtons removeObject:self.composeBarButtonItem];
+        [self.toolbarButtons addObject:self.cancleBarButtonItem];
+        [self.toolbarButtons addObject:self.saveBarButtonItem];
+        [self.navigationItem setRightBarButtonItems:self.toolbarButtons animated:YES];
+    }
+}
+
+- (void)showComposeButton {
+    if (![self.toolbarButtons containsObject:self.composeBarButtonItem]) {
+        [self.toolbarButtons removeAllObjects];
+        [self.toolbarButtons addObject:self.composeBarButtonItem];
+        [self.navigationItem setRightBarButtonItems:self.toolbarButtons animated:YES];
+    }
 }
 
 @end

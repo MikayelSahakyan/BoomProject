@@ -73,5 +73,4 @@
     return CGRectGetHeight(rect) + 2 * offset;
 }
 
-
 @end

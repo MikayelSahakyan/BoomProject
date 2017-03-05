@@ -11,7 +11,7 @@
 @interface EntryTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *keyLabel;
-@property (weak, nonatomic) IBOutlet UILabel *valueLabel;
+@property (weak, nonatomic) IBOutlet UITextView *valueTextView;
 
 + (CGFloat)heightForKey:(NSString *)keyText;
 + (CGFloat)heightForValue:(NSString *)valueText;

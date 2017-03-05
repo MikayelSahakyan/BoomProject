@@ -15,7 +15,6 @@
 @interface EntriesViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) UIRefreshControl *refreshControl;
 @property (strong, nonatomic) NSMutableArray *entriesArray;
 @property (strong, nonatomic) Entry *lastEntry;
 @property (strong, nonatomic) Entry *sendedEntry;
@@ -31,11 +30,6 @@
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationItem.title = self.formName;
-    
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.tintColor = [UIColor colorWithRed:0 green:0.588 blue:0.875 alpha:1];
-    [self.tableView addSubview:self.refreshControl];
-    [self.refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
     
     self.entriesArray = [NSMutableArray array];
     self.currentEntryArray = [NSMutableArray array];
@@ -117,7 +111,7 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
-
+// Remove entry from tableview with swipe to delete
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         Entry *removedEntry = [[self.entriesArray objectAtIndex:indexPath.row] objectAtIndex:0];
@@ -139,6 +133,15 @@
     [self.sendedEntryArray addObjectsFromArray:[self.currentEntryArray subarrayWithRange:NSMakeRange(1, length)]];
     [self.currentEntryArray removeAllObjects];
     [self performSegueWithIdentifier:@"Entry" sender:self];
+}
+// Load more entries
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.row == [self.entriesArray count] - 1) {
+        if ([self.entriesArray count] >= 10) {
+            [self getEntriesFromServer];
+        }
+    }
 }
 
 #pragma mark - IBAction
@@ -187,14 +190,6 @@
         [sendedEntryVC setEntryDate:self.sendedEntry.date];
         [sendedEntryVC setEntryID:self.sendedEntry.ID];
     }
-}
-
-- (void)refreshTable {
-    if ([self.entriesArray count] >= 10) {
-        [self getEntriesFromServer];
-    }
-    [self.refreshControl endRefreshing];
-    [self.tableView reloadData];
 }
 
 - (NSDate *)changeStringToDate:(NSString *)date {
