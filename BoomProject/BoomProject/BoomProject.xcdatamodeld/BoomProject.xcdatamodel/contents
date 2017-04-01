@@ -1,4 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16D32" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="Entry" representedClassName="Entry" parentEntity="ServiceObject" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="entryID" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="form" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Form" inverseName="entries" inverseEntity="Form" syncable="YES"/>
+        <relationship name="rows" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Row" inverseName="entry" inverseEntity="Row" syncable="YES"/>
+    </entity>
+    <entity name="Form" representedClassName="Form" parentEntity="ServiceObject" syncable="YES">
+        <attribute name="formID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="entries" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Entry" inverseName="form" inverseEntity="Entry" syncable="YES"/>
+    </entity>
+    <entity name="Row" representedClassName="Row" parentEntity="ServiceObject" syncable="YES">
+        <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rowID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="entry" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Entry" inverseName="rows" inverseEntity="Entry" syncable="YES"/>
+    </entity>
+    <entity name="ServiceObject" representedClassName="ServiceObject" syncable="YES">
+        <attribute name="index" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="ServiceObject" positionX="493" positionY="-10764" width="128" height="58"/>
+        <element name="Form" positionX="304" positionY="-10656" width="128" height="88"/>
+        <element name="Entry" positionX="495" positionY="-10656" width="128" height="103"/>
+        <element name="Row" positionX="684" positionY="-10656" width="128" height="103"/>
+    </elements>
 </model>

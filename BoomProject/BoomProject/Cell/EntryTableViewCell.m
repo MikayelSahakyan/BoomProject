@@ -12,50 +12,25 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+    [self.valueTextView setTextContainerInset:UIEdgeInsetsMake(8, 0, 0, 0)];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 
-+ (CGFloat)heightForKey:(NSString *)keyText {
-    
-    CGFloat offset = 8.0;
-    
-    UIFont *font = [UIFont systemFontOfSize:20.f];
-    
-    NSShadow *shadow = [[NSShadow alloc] init];
-    shadow.shadowOffset = CGSizeMake(0, -1);
-    shadow.shadowBlurRadius = 0.5;
-    
-    NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
-    [paragraph setLineBreakMode:NSLineBreakByCharWrapping];
-    [paragraph setAlignment:NSTextAlignmentLeft];
-    
-    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                font, NSFontAttributeName,
-                                paragraph, NSParagraphStyleAttributeName,
-                                shadow, NSShadowAttributeName, nil];
-    
-    CGRect rect = [keyText boundingRectWithSize:CGSizeMake(118 - 2 * offset, CGFLOAT_MAX)
-                                    options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
-                                 attributes:attributes context:nil];
-    
-    return CGRectGetHeight(rect) + 2 * offset;
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self.valueTextView setTextContainerInset:UIEdgeInsetsMake(8, 0, 0, 0)];
 }
 
-+ (CGFloat)heightForValue:(NSString *)valueText {
++ (CGFloat)heightForKey:(NSString *)keyText width:(CGFloat)width {
     
-    CGFloat offset = 8.0;
+    CGFloat offset = 10.0;
     
     UIFont *font = [UIFont systemFontOfSize:20.f];
-    
-    NSShadow *shadow = [[NSShadow alloc] init];
-    shadow.shadowOffset = CGSizeMake(0, -1);
-    shadow.shadowBlurRadius = 0.5;
     
     NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
     [paragraph setLineBreakMode:NSLineBreakByCharWrapping];
@@ -63,14 +38,52 @@
     
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                 font, NSFontAttributeName,
-                                paragraph, NSParagraphStyleAttributeName,
-                                shadow, NSShadowAttributeName, nil];
+                                paragraph, NSParagraphStyleAttributeName, nil];
     
-    CGRect rect = [valueText boundingRectWithSize:CGSizeMake(263 - 2 * offset, CGFLOAT_MAX)
+    CGRect rect = [keyText boundingRectWithSize:CGSizeMake(width - 2 * offset, CGFLOAT_MAX)
                                         options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
                                      attributes:attributes context:nil];
     
     return CGRectGetHeight(rect) + 2 * offset;
 }
 
++ (CGFloat)heightForValue:(NSString *)valueText width:(CGFloat)width {
+    
+    CGFloat offset = 8.0;
+    
+    UIFont *font = [UIFont systemFontOfSize:20.f];
+    
+    NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
+    [paragraph setLineBreakMode:NSLineBreakByCharWrapping];
+    [paragraph setAlignment:NSTextAlignmentLeft];
+    
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                font, NSFontAttributeName,
+                                paragraph, NSParagraphStyleAttributeName, nil];
+    
+    CGRect rect = [valueText boundingRectWithSize:CGSizeMake(width - 2 * offset, CGFLOAT_MAX)
+                                          options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+                                       attributes:attributes context:nil];
+    
+    return CGRectGetHeight(rect) + 2 * offset;
+}
+/*
+ - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
+ 
+ return YES;
+ }
+ - (BOOL)textViewShouldEndEditing:(UITextView *)textView {
+ 
+ return YES;
+ }
+ 
+ - (void)textViewDidBeginEditing:(UITextView *)textView {
+ 
+ }
+ 
+ - (void)textViewDidEndEditing:(UITextView *)textView {
+ 
+ }
+ 
+ */
 @end

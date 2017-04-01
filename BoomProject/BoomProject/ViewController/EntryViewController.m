@@ -9,7 +9,8 @@
 #import "EntryViewController.h"
 #import "EntryTableViewCell.h"
 #import "ServiceManager.h"
-#import "Entry.h"
+#import "Entry+CoreDataClass.h"
+#import "Row+CoreDataClass.h"
 
 @interface EntryViewController ()
 
@@ -28,12 +29,14 @@
     [super viewDidLoad];
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationItem.title = self.entryDate;
+    self.navigationItem.title = self.entry.date;
     
     self.toolbarButtons = [self.navigationItem.rightBarButtonItems mutableCopy];
     [self.toolbarButtons removeObject:self.saveBarButtonItem];
     [self.toolbarButtons removeObject:self.cancleBarButtonItem];
     [self.navigationItem setRightBarButtonItems:self.toolbarButtons animated:YES];
+    self.rowsArray = [self getRowsArrayFromEntry];
+    [self viewDidLayoutSubviews];
     
     self.isEditable = NO;
 }
@@ -43,23 +46,14 @@
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.entryArray count];
+    return [self.rowsArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     EntryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EntryCell" forIndexPath:indexPath];
-    Entry *entry = [self.entryArray objectAtIndex:indexPath.row];
-    cell.keyLabel.text = [NSString stringWithFormat:@"%@:", entry.key];
-    cell.valueTextView.text = [NSString stringWithFormat:@"%@", entry.value];
+    [self configureCell:cell forRowAtIndexPath:indexPath];
     
-    if (self.isEditable) {
-        cell.valueTextView.editable = YES;
-        [cell.valueTextView setTextColor:[UIColor grayColor]];
-    } else {
-        cell.valueTextView.editable = NO;
-        [cell.valueTextView setTextColor:[UIColor blackColor]];
-    }
     return cell;
 }
 
@@ -67,16 +61,32 @@
     return YES;
 }
 
+- (CGFloat)getKeyLabelWidth {
+    CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
+    CGFloat width = (screenWidth - 12) / 3;
+    return width;
+}
+
+- (CGFloat)getValueLabelWidth {
+    CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
+    CGFloat width = screenWidth - [self getKeyLabelWidth] + 8;
+    return width;
+}
+
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    Entry *entry = [self.entryArray objectAtIndex:indexPath.row];
-    return MAX([EntryTableViewCell heightForKey:entry.key], [EntryTableViewCell heightForValue:entry.value]);
+    Row *row = self.rowsArray[indexPath.row];
+    CGFloat keyWidth = [self getKeyLabelWidth];
+    CGFloat valueWidth = [self getValueLabelWidth];
+    CGFloat heightForKey = [EntryTableViewCell heightForKey:row.key width:keyWidth];
+    CGFloat heightForValue = [EntryTableViewCell heightForValue:row.value width:valueWidth];
+    return MAX(heightForKey, heightForValue);// + 20;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-
+    
 }
 
 #pragma mark - IBAction
@@ -100,6 +110,28 @@
 }
 
 #pragma mark -
+
+- (NSArray *)getRowsArrayFromEntry {
+    NSArray *arrayOfRows = self.entry.rows.allObjects;
+    NSSortDescriptor *indexDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+    NSArray *sortedArray = [arrayOfRows sortedArrayUsingDescriptors:@[indexDescriptor]];
+    return sortedArray;
+}
+
+- (void)configureCell:(EntryTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    Row *row = self.rowsArray[indexPath.row];
+    
+    cell.keyLabel.text = [NSString stringWithFormat:@"%@:", row.key];
+    cell.valueTextView.text = [NSString stringWithFormat:@"%@", row.value];
+    
+    if (self.isEditable) {
+        cell.valueTextView.editable = YES;
+        [cell.valueTextView setTextColor:[UIColor grayColor]];
+    } else {
+        cell.valueTextView.editable = NO;
+        [cell.valueTextView setTextColor:[UIColor blackColor]];
+    }
+}
 
 - (void)hideComposeButton {
     if (!([self.toolbarButtons containsObject:self.saveBarButtonItem] && [self.toolbarButtons containsObject:self.cancleBarButtonItem])) {

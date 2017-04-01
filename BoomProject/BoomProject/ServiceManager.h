@@ -8,23 +8,24 @@
 
 #import <Foundation/Foundation.h>
 #import <AFNetworking/AFNetworking.h>
+#import "Form+CoreDataClass.h"
 
 @interface ServiceManager : AFHTTPSessionManager
 
 + (ServiceManager *)sharedManager;
 
 - (void)loginWithUserToken:(NSString *)userToken
-                onSuccess:(void (^)(NSArray *forms))success
+                 onSuccess:(void (^)(NSArray *forms))success
                  onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
 
 - (void)getEntriesWithUserToken:(NSString *)userToken
-                      andFormID:(NSString *)formID
-                    lastEntryID:(NSString *)entryID
+                fromCurrentForm:(Form *)form
+                    lastEntryID:(double)entryID
                       onSuccess:(void (^)(NSArray *entries))success
                       onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
 
 - (void)removeEntryWithUserToken:(NSString *)userToken
-               andRemovedEntryID:(NSString *)entryID
+               andRemovedEntryID:(double)entryID
                        onSuccess:(void (^)(id result))success
                        onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
 

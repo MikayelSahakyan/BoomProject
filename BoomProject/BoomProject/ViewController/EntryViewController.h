@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Entry+CoreDataClass.h"
 
 @interface EntryViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
-@property (strong, nonatomic) NSString *entryID;
-@property (strong, nonatomic) NSString *entryDate;
-@property (strong, nonatomic) NSMutableArray *entryArray;
+@property (strong, nonatomic) Entry *entry;
+@property (strong, nonatomic) NSArray *rowsArray;
 
 @end

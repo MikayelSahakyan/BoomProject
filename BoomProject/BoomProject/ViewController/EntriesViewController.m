@@ -10,14 +10,17 @@
 #import "EntriesTableViewCell.h"
 #import "EntryViewController.h"
 #import "ServiceManager.h"
-#import "Entry.h"
+#import "DataManager.h"
+#import "ServiceObject+CoreDataClass.h"
+#import "Entry+CoreDataClass.h"
+#import "Row+CoreDataClass.h"
 
 @interface EntriesViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *entriesArray;
-@property (strong, nonatomic) Entry *lastEntry;
-@property (strong, nonatomic) Entry *sendedEntry;
+@property (assign, nonatomic) double lastEntryID;
+@property (strong, nonatomic) Entry *currentEntry;
 @property (strong, nonatomic) NSMutableArray *currentEntryArray;
 @property (strong, nonatomic) NSMutableArray *sendedEntryArray;
 
@@ -29,30 +32,40 @@
     [super viewDidLoad];
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationItem.title = self.formName;
+    self.navigationItem.title = self.form.name;
     
     self.entriesArray = [NSMutableArray array];
     self.currentEntryArray = [NSMutableArray array];
     self.sendedEntryArray = [NSMutableArray array];
-    self.lastEntry = [[Entry alloc] init];
-    self.sendedEntry = [[Entry alloc] init];
-    self.lastEntry.ID = @"0";
-    
+    self.lastEntryID = 0;
+    [self getEntriesFromCoreData];
+    //[self getEntriesFromServer];
+}
+
+#pragma mark - CoreData
+
+- (void)getEntriesFromCoreData {
+    [[DataManager sharedManager] printAllObjects];
+    NSArray *entries = [[DataManager sharedManager] allEntriesFromForm:self.form];
+    [self.entriesArray addObjectsFromArray:entries];
+    [self.tableView reloadData];
     [self getEntriesFromServer];
 }
 
 #pragma mark - API
 
 - (void)getEntriesFromServer {
+    //[[DataManager sharedManager] printAllEntries];
     [[ServiceManager sharedManager] getEntriesWithUserToken:@"david"
-                                                  andFormID:self.formID
-                                                lastEntryID:self.lastEntry.ID
+                                            fromCurrentForm:self.form
+                                                lastEntryID:self.lastEntryID
                                                   onSuccess:^(NSArray *entries) {
                                                       [self.entriesArray addObjectsFromArray:entries];
                                                       [self.tableView reloadData];
                                                       
                                                       if ([self.entriesArray count] >= 10) {
-                                                          self.lastEntry = [[self.entriesArray objectAtIndex:([self.entriesArray count] - 1)] objectAtIndex:0];
+                                                          Entry *lastEntry = self.entriesArray[([self.entriesArray count] - 1)];
+                                                          self.lastEntryID = lastEntry.entryID;
                                                       }
                                                   }
                                                   onFailure:^(NSError *error, NSInteger statusCode) {
@@ -62,7 +75,7 @@
 
 - (void)removeEntry:(Entry *)entry {
     [[ServiceManager sharedManager] removeEntryWithUserToken:@"david"
-                                           andRemovedEntryID:entry.ID
+                                           andRemovedEntryID:entry.entryID
                                                    onSuccess:^(id result) {
                                                        //
                                                    }
@@ -80,31 +93,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     EntriesTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EntryCell" forIndexPath:indexPath];
+    [self configureCell:cell forRowAtIndexPath:indexPath];
     
-    for (NSInteger i = 0; i < 4; i++) {
-        Entry *entry = [[self.entriesArray objectAtIndex:indexPath.row] objectAtIndex:i];
-        
-        switch (i) {
-            case 0:
-                cell.dateLabel.text = [NSString stringWithFormat:@"%@",
-                                       [Entry relativeDateStringForDate:[self changeStringToDate:entry.date]]];
-                break;
-                case 1:
-                cell.nameLabel.text = [NSString stringWithFormat:@"%@:", entry.key];
-                cell.nameValueLabel.text = [NSString stringWithFormat:@"%@", entry.value];
-                break;
-                case 2:
-                cell.emailLabel.text = [NSString stringWithFormat:@"%@:", entry.key];
-                cell.emailValueLabel.text = [NSString stringWithFormat:@"%@", entry.value];
-                break;
-                case 3:
-                cell.commentLabel.text = [NSString stringWithFormat:@"%@:", entry.key];
-                cell.commentValueLabel.text = [NSString stringWithFormat:@"%@", entry.value];
-                break;
-            default:
-                break;
-        }
-    }
     return cell;
 }
 
@@ -114,7 +104,7 @@
 // Remove entry from tableview with swipe to delete
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        Entry *removedEntry = [[self.entriesArray objectAtIndex:indexPath.row] objectAtIndex:0];
+        Entry *removedEntry = [self.entriesArray objectAtIndex:indexPath.row];
         [self removeEntry:removedEntry];
         [self.entriesArray removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -125,20 +115,15 @@
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    [self.currentEntryArray addObjectsFromArray:[self.entriesArray objectAtIndex:indexPath.row]];
-    self.sendedEntry = [self.currentEntryArray objectAtIndex:0];
-    [self.sendedEntryArray removeAllObjects];
-    NSInteger length = [self.currentEntryArray indexOfObject:[self.currentEntryArray lastObject]];
-    [self.sendedEntryArray addObjectsFromArray:[self.currentEntryArray subarrayWithRange:NSMakeRange(1, length)]];
-    [self.currentEntryArray removeAllObjects];
+    self.currentEntry = self.entriesArray[indexPath.row];
     [self performSegueWithIdentifier:@"Entry" sender:self];
 }
+
 // Load more entries
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.row == [self.entriesArray count] - 1) {
-        if ([self.entriesArray count] >= 10) {
+        if ([self.entriesArray count] % 10 == 0) {
             [self getEntriesFromServer];
         }
     }
@@ -182,23 +167,51 @@
 
 #pragma mark -
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)configureCell:(EntriesTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    Entry *entry = self.entriesArray[indexPath.row];
+    NSArray *array = entry.rows.allObjects;
+    NSSortDescriptor *indexDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+    NSArray *sortedArray = [array sortedArrayUsingDescriptors:@[indexDescriptor]];
+    
+    for (NSInteger i = 0; i < [sortedArray count]; i ++) {
+        Row *row = sortedArray[i];
+        
+        switch (i) {
+            case 0:
+                cell.nameLabel.text = [NSString stringWithFormat:@"%@:", row.key];
+                cell.nameValueLabel.text = [NSString stringWithFormat:@"%@", row.value];
+                break;
+            case 1:
+                cell.emailLabel.text = [NSString stringWithFormat:@"%@:", row.key];
+                cell.emailValueLabel.text = [NSString stringWithFormat:@"%@", row.value];
+                break;
+            case 2:
+                cell.commentLabel.text = [NSString stringWithFormat:@"%@:", row.key];
+                cell.commentValueLabel.text = [NSString stringWithFormat:@"%@", row.value];
+                break;
+            case 3:
+                cell.dateLabel.text = [NSString stringWithFormat:@"%@",
+                                       [Entry relativeDateStringForDate:[self changeStringToDate:entry.date]]];
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"Entry"]) {
-        EntryViewController *sendedEntryVC = [segue destinationViewController];
-        [sendedEntryVC setEntryArray:self.sendedEntryArray];
-        [sendedEntryVC setEntryDate:self.sendedEntry.date];
-        [sendedEntryVC setEntryID:self.sendedEntry.ID];
+        EntryViewController *entryVC = [segue destinationViewController];
+        [entryVC setEntry:self.currentEntry];
     }
 }
 
 - (NSDate *)changeStringToDate:(NSString *)date {
-    
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSDate *entryDate = [NSDate date];
     entryDate = [dateFormatter dateFromString:date];
-    
     return entryDate;
 }
 

@@ -7,8 +7,8 @@
 //
 
 #import "ServiceManager.h"
-#import "Form.h"
-#import "Entry.h"
+#import "ServiceObject+CoreDataClass.h"
+#import "DataManager.h"
 
 static NSString *const kLoginFirebaseToken = @"fDWS5Jv-mdc:APA91bG-RuNhAp5-NZGm47MCFTdHYVZ0idkCwa2vItyEvncAp7wVOVXxYA_q2s1Q8rElfqzUa3UsshCS6lohoCBEKzaanSWWR1XYOF3qIWbz-qZxZGg12VyLMnjgaLG2IdWlIymj17h0";
 static NSString *const kHostSettingsURL = @"http://api.boomform.com/form/settings";
@@ -43,15 +43,20 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
       progress:nil
        success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
            NSLog(@"JSON:%@", responseObject);
-           
+           NSManagedObjectContext *context = [[[DataManager sharedManager] persistentContainer] viewContext];
+           [[DataManager sharedManager] deleteAllForms];
            NSArray *dictsArray = responseObject;
            NSMutableArray *objectsArray = [NSMutableArray array];
            
            for (NSDictionary *dictionary in dictsArray) {
-               Form *form = [[Form alloc] initWithResponse:dictionary];
+               Form *form = [NSEntityDescription insertNewObjectForEntityForName:@"Form" inManagedObjectContext:context];
+               form.formID = [dictionary objectForKey:@"id"];
+               form.name = [dictionary objectForKey:@"name"];
+               form.index = [dictsArray indexOfObject:dictionary];
                [objectsArray addObject:form];
            }
            if (success) {
+               [[DataManager sharedManager] saveContext];
                success(objectsArray);
            }
        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -65,52 +70,73 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
 }
 
 - (void)getEntriesWithUserToken:(NSString *)userToken
-                      andFormID:(NSString *)formID
-                    lastEntryID:(NSString *)entryID
+                fromCurrentForm:(Form *)form
+                    lastEntryID:(double)entryID
                       onSuccess:(void (^)(NSArray *entries))success
                       onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
     
     NSDictionary *params = @{@"user_token" : userToken,
-                             @"form_id"    : formID,
-                             @"entry_id"   : entryID};
+                             @"form_id"    : form.formID,
+                             @"entry_id"   : @(entryID)};
     [self GET:kHostEntryURL
-    parameters:params
-      progress:nil
-       success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-           NSLog(@"JSON:%@", responseObject);
-           NSArray *arraysArray = responseObject;
-           NSMutableArray *entriesArray = [NSMutableArray array];
-           
-           for (NSArray *dictsArray in arraysArray) {
-               NSMutableArray *objectsArray = [NSMutableArray array];
-               
-               for (NSDictionary *dictionary in dictsArray) {
-                   Entry *entry = [[Entry alloc] initWithResponse:dictionary];
-                   [objectsArray addObject:entry];
-               }
-               [entriesArray addObject:objectsArray];
-           }
-           if (success) {
-               success(entriesArray);
-           }
-       } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-           NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
-           NSInteger statusCode = [response statusCode];
-           NSLog(@"Error:%@", error);
-           if (failure) {
-               failure(error, statusCode);
-           }
-       }];
+   parameters:params
+     progress:nil
+      success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+          
+          NSLog(@"JSON:%@", responseObject);
+          NSManagedObjectContext *context = [[[DataManager sharedManager] persistentContainer] viewContext];
+          
+          NSArray *arrayOfArrays = responseObject;
+          NSMutableArray *entriesArray = [NSMutableArray array];
+          
+          for (NSArray *rowDictsArray in arrayOfArrays) {
+              
+              if ([rowDictsArray count] > 1) {
+                  // Parsing entry info at 0 index
+                  Entry *entry = [NSEntityDescription insertNewObjectForEntityForName:@"Entry" inManagedObjectContext:context];
+                  NSDictionary *entryInfo = rowDictsArray[0];
+                  entry.date = entryInfo[@"date"];
+                  entry.entryID = [entryInfo[@"id"] doubleValue];
+                  entry.index = [arrayOfArrays indexOfObject:rowDictsArray];
+                  
+                  // Parsing rows
+                  for (NSInteger i = 1; i < [rowDictsArray count]; i++) {
+                      
+                      NSDictionary *rowDict = rowDictsArray[i];
+                      
+                      Row *row = [NSEntityDescription insertNewObjectForEntityForName:@"Row" inManagedObjectContext:context];
+                      row.key = [rowDict objectForKey:@"key"];
+                      row.value = [rowDict objectForKey:@"value"];
+                      row.rowID = [rowDict objectForKey:@"row_id"];
+                      row.entry = entry;
+                      row.index = i;
+                  }
+                  entry.form = form;
+                  [entriesArray addObject:entry];
+              }
+          }
+          [[DataManager sharedManager] saveContext];
+          if (success) {
+              success(entriesArray);
+          }
+      } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+          NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
+          NSInteger statusCode = [response statusCode];
+          NSLog(@"Error:%@", error);
+          if (failure) {
+              failure(error, statusCode);
+          }
+      }];
 }
 
 - (void)removeEntryWithUserToken:(NSString *)userToken
-               andRemovedEntryID:(NSString *)entryID
+               andRemovedEntryID:(double)entryID
                        onSuccess:(void (^)(id result))success
                        onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
     
     NSDictionary *params = @{@"user_token"     : userToken,
                              @"firebase_token" : kLoginFirebaseToken,
-                             @"entry_remove"   : entryID};
+                             @"entry_remove"   : @(entryID)};
     [self POST:kHostSettingsURL
     parameters:params
       progress:nil

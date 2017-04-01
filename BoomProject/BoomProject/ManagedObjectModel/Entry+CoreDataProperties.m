@@ -1,24 +1,17 @@
 //
-//  Entry.m
+//  Entry+CoreDataProperties.m
 //  BoomProject
 //
-//  Created by User ACA on 2/28/17.
+//  Created by User ACA on 3/31/17.
 //  Copyright © 2017 Mikayel Sahakyan. All rights reserved.
 //
 
-#import "Entry.h"
+#import "Entry+CoreDataProperties.h"
 
-@implementation Entry
+@implementation Entry (CoreDataProperties)
 
-- (instancetype)initWithResponse:(NSDictionary *)responseObject {
-    self = [super initWithResponse:responseObject];
-    if (self) {
-        self.date = [responseObject objectForKey:@"date"];
-        self.key = [responseObject objectForKey:@"key"];
-        self.value = [responseObject objectForKey:@"value"];
-        self.rowID = [responseObject objectForKey:@"row_id"];
-    }
-    return self;
++ (NSFetchRequest<Entry *> *)fetchRequest {
+	return [[NSFetchRequest alloc] initWithEntityName:@"Entry"];
 }
 
 + (NSString *)relativeDateStringForDate:(NSDate *)date {
@@ -46,5 +39,10 @@
         return @"Today";
     }
 }
+
+@dynamic entryID;
+@dynamic date;
+@dynamic form;
+@dynamic rows;
 
 @end

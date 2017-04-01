@@ -10,14 +10,15 @@
 #import "FormTableViewCell.h"
 #import "EntriesViewController.h"
 #import "ServiceManager.h"
-#import "Form.h"
+#import "DataManager.h"
+#import "Form+CoreDataClass.h"
 
 @interface FormViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 @property (strong, nonatomic) NSMutableArray *formsArray;
-@property (strong, nonatomic) Form *form;
+@property (strong, nonatomic) Form *currentForm;
 
 @end
 
@@ -33,8 +34,17 @@
     [self.tableView addSubview:self.refreshControl];
     [self.refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
     self.formsArray = [NSMutableArray array];
-    
+    [self getFormsFromCoreData];
     [self getFormsFromServer];
+}
+
+#pragma mark - CoreData
+
+- (void)getFormsFromCoreData {
+    [[DataManager sharedManager] printAllForms];
+    NSArray *forms = [[DataManager sharedManager] allForms];
+    [self.formsArray addObjectsFromArray:forms];
+    [self.tableView reloadData];
 }
 
 #pragma mark - API
@@ -42,6 +52,7 @@
 - (void)getFormsFromServer {
     [[ServiceManager sharedManager] loginWithUserToken:@"david"
                                              onSuccess:^(NSArray *forms) {
+                                                 [self.formsArray removeAllObjects];
                                                  [self.formsArray addObjectsFromArray:forms];
                                                  [self.tableView reloadData];
                                              }
@@ -68,7 +79,7 @@
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.form = [self.formsArray objectAtIndex:indexPath.row];
+    self.currentForm = [self.formsArray objectAtIndex:indexPath.row];
     [self performSegueWithIdentifier:@"Entries" sender:self];
 }
 
@@ -109,14 +120,13 @@
     [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
-#pragma mark - 
+#pragma mark -
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([[segue identifier] isEqualToString:@"Entries"]) {
-        EntriesViewController *entryVC = [segue destinationViewController];
-        [entryVC setFormID:self.form.ID];
-        [entryVC setFormName:self.form.name];
+        EntriesViewController *entriesVC = [segue destinationViewController];
+        [entriesVC setForm:self.currentForm];
     }
 }
 
