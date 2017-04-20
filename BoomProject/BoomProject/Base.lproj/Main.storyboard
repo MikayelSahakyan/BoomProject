@@ -40,15 +40,27 @@
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bhJ-9J-dod">
                                 <rect key="frame" x="310" y="92" width="51" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="onTintColor" red="0.22524526715278625" green="0.599831223487854" blue="0.86152249574661255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="notificationStatusChangeAction" destination="ZkE-GA-MFd" eventType="valueChanged" id="j5t-jU-hrQ"/>
+                                </connections>
                             </switch>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ONz-Yz-Beo">
                                 <rect key="frame" x="310" y="152" width="51" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="onTintColor" red="0.22524526715278625" green="0.599831223487854" blue="0.86152249574661255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="soundStatusChangeAction" destination="ZkE-GA-MFd" eventType="valueChanged" id="tb5-da-hOI"/>
+                                </connections>
                             </switch>
                         </subviews>
                         <color key="backgroundColor" red="0.93325161933898926" green="0.93338567018508911" blue="0.93322223424911499" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" title="Settings" id="akD-0b-uIE"/>
+                    <connections>
+                        <outlet property="notificationSwitcher" destination="bhJ-9J-dod" id="bOt-zy-Pxg"/>
+                        <outlet property="soundSwitcher" destination="ONz-Yz-Beo" id="fkW-et-lcB"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jK7-x2-9tb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -57,7 +69,7 @@
         <!--Boom Form-->
         <scene sceneID="5gE-eu-5he">
             <objects>
-                <viewController id="x9G-75-GP3" customClass="LoginViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="login" id="x9G-75-GP3" customClass="LoginViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8d2-0x-vRB"/>
                         <viewControllerLayoutGuide type="bottom" id="vxT-kw-pg2"/>
@@ -136,7 +148,7 @@
         <!--Select Form-->
         <scene sceneID="pGs-JS-aT2">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="QYq-Tz-aRF" customClass="FormViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="form" automaticallyAdjustsScrollViewInsets="NO" id="QYq-Tz-aRF" customClass="FormViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="cgA-vq-lYe"/>
                         <viewControllerLayoutGuide type="bottom" id="WO3-Xt-tak"/>
@@ -257,7 +269,7 @@
         <!--Navigation Controller-->
         <scene sceneID="HMK-vj-ZP6">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="omn-HX-JLS" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="navigation" automaticallyAdjustsScrollViewInsets="NO" id="omn-HX-JLS" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="SHt-Do-Vzk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>

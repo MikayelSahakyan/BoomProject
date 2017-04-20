@@ -86,7 +86,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    
 }
 
 #pragma mark - IBAction
@@ -121,8 +120,8 @@
 - (void)configureCell:(EntryTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     Row *row = self.rowsArray[indexPath.row];
     
-    cell.keyLabel.text = [NSString stringWithFormat:@"%@:", row.key];
-    cell.valueTextView.text = [NSString stringWithFormat:@"%@", row.value];
+    cell.keyLabel.text = row.key;
+    cell.valueTextView.text = row.value;
     
     if (self.isEditable) {
         cell.valueTextView.editable = YES;

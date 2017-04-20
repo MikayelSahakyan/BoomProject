@@ -67,7 +67,7 @@
     
     return CGRectGetHeight(rect) + 2 * offset;
 }
-/*
+
  - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
  
  return YES;
@@ -85,5 +85,5 @@
  
  }
  
- */
+ 
 @end

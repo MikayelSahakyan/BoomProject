@@ -84,6 +84,19 @@
                                                    }];
 }
 
+- (void)logOut {
+    [[ServiceManager sharedManager] logOutWithUserToken:@"david"
+                                              onSuccess:^(id result) {
+                                                  //
+                                              }
+                                              onFailure:^(NSError *error, NSInteger statusCode) {
+                                                  //
+                                              }];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:NO forKey:@"StaySignedIn"];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -150,6 +163,7 @@
     UIAlertAction *button2 = [UIAlertAction actionWithTitle:@"Log Out"
                                                       style:UIAlertActionStyleDestructive
                                                     handler:^(UIAlertAction * _Nonnull action) {
+                                                        [self logOut];
                                                         [self.navigationController popToRootViewControllerAnimated:YES];
                                                     }];
     UIAlertAction *button3 = [UIAlertAction actionWithTitle:@"Cancle"
@@ -179,16 +193,16 @@
         
         switch (i) {
             case 0:
-                cell.nameLabel.text = [NSString stringWithFormat:@"%@:", row.key];
-                cell.nameValueLabel.text = [NSString stringWithFormat:@"%@", row.value];
+                cell.nameLabel.text = row.key;
+                cell.nameValueLabel.text = row.value;
                 break;
             case 1:
-                cell.emailLabel.text = [NSString stringWithFormat:@"%@:", row.key];
-                cell.emailValueLabel.text = [NSString stringWithFormat:@"%@", row.value];
+                cell.emailLabel.text = row.key;
+                cell.emailValueLabel.text = row.value;
                 break;
             case 2:
-                cell.commentLabel.text = [NSString stringWithFormat:@"%@:", row.key];
-                cell.commentValueLabel.text = [NSString stringWithFormat:@"%@", row.value];
+                cell.commentLabel.text = row.key;
+                cell.commentValueLabel.text = row.value;
                 break;
             case 3:
                 cell.dateLabel.text = [NSString stringWithFormat:@"%@",

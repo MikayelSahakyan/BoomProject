@@ -21,4 +21,14 @@
     // Configure the view for the selected state
 }
 
+- (void)prepareForReuse {
+    self.nameLabel.text = @"";
+    self.nameValueLabel.text = @"";
+    self.emailLabel.text = @"";
+    self.emailValueLabel.text = @"";
+    self.commentLabel.text = @"";
+    self.commentValueLabel.text = @"";
+    self.dateLabel.text = @"";
+}
+
 @end

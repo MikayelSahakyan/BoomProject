@@ -29,4 +29,18 @@
                        onSuccess:(void (^)(id result))success
                        onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
 
+- (void)logOutWithUserToken:(NSString *)userToken
+                  onSuccess:(void (^)(id result))success
+                  onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
+
+- (void)changeNotificationWithUserToken:(NSString *)userToken
+            andNotificationStatusChange:(NSInteger)change
+                              onSuccess:(void (^)(id result))success
+                              onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
+
+- (void)changeSoundWithUserToken:(NSString *)userToken
+            andSoundStatusChange:(NSInteger)change
+                       onSuccess:(void (^)(id result))success
+                       onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
+
 @end

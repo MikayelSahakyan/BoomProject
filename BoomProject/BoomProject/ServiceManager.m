@@ -156,4 +156,84 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
        }];
 }
 
+- (void)logOutWithUserToken:(NSString *)userToken
+                  onSuccess:(void (^)(id result))success
+                  onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
+    
+    NSDictionary *params = @{@"user_token"     : userToken,
+                             @"firebase_token" : kLoginFirebaseToken,
+                             @"status"         : @"logged_out"};
+    [self POST:kHostSettingsURL
+    parameters:params
+      progress:nil
+       success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+           NSLog(@"JSON:%@", responseObject);
+           if (success) {
+               success(responseObject);
+           }
+       }
+       failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+           NSHTTPURLResponse *respone = (NSHTTPURLResponse *)task.response;
+           NSInteger statusCode = [respone statusCode];
+           NSLog(@"Error:%@", error);
+           if (failure) {
+               failure(error, statusCode);
+           }
+       }];
+}
+
+- (void)changeNotificationWithUserToken:(NSString *)userToken
+            andNotificationStatusChange:(NSInteger)change
+                              onSuccess:(void (^)(id result))success
+                              onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
+    
+    NSDictionary *params = @{@"user_token"     : userToken,
+                             @"firebase_token" : kLoginFirebaseToken,
+                             @"notification"   : @(change)};
+    [self POST:kHostSettingsURL
+    parameters:params
+      progress:nil
+       success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+           NSLog(@"JSON:%@", responseObject);
+           if (success) {
+               success(responseObject);
+           }
+       }
+       failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+           NSHTTPURLResponse *respone = (NSHTTPURLResponse *)task.response;
+           NSInteger statusCode = [respone statusCode];
+           NSLog(@"Error:%@", error);
+           if (failure) {
+               failure(error, statusCode);
+           }
+       }];
+}
+
+- (void)changeSoundWithUserToken:(NSString *)userToken
+            andSoundStatusChange:(NSInteger)change
+                       onSuccess:(void (^)(id result))success
+                       onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
+    
+    NSDictionary *params = @{@"user_token"     : userToken,
+                             @"firebase_token" : kLoginFirebaseToken,
+                             @"sound"          : @(change)};
+    [self POST:kHostSettingsURL
+    parameters:params
+      progress:nil
+       success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+           NSLog(@"JSON:%@", responseObject);
+           if (success) {
+               success(responseObject);
+           }
+       }
+       failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+           NSHTTPURLResponse *respone = (NSHTTPURLResponse *)task.response;
+           NSInteger statusCode = [respone statusCode];
+           NSLog(@"Error:%@", error);
+           if (failure) {
+               failure(error, statusCode);
+           }
+       }];
+}
+
 @end

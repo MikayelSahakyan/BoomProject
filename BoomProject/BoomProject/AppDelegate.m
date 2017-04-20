@@ -9,15 +9,44 @@
 #import "AppDelegate.h"
 #import "DataManager.h"
 
+// Define constant for version check
+#define SYSTEM_VERSION_GRATERTHAN_OR_EQUALTO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    
+    [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
+        if ([settings authorizationStatus] == UNAuthorizationStatusNotDetermined) {
+            [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+                //
+            }];
+        }
+    }];
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"StaySignedIn"]) {
+        NSLog(@"not first launch");
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        UIViewController *formVC = [storyboard instantiateViewControllerWithIdentifier:@"form"];
+        UINavigationController *navigationController = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"navigation"];
+        [navigationController pushViewController:formVC animated:NO];
+        self.window.rootViewController = navigationController;
+    } else {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        UIViewController *loginVC = [storyboard instantiateViewControllerWithIdentifier:@"login"];
+        UINavigationController *navigationController = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"navigation"];
+        [navigationController pushViewController:loginVC animated:NO];
+        self.window.rootViewController = navigationController;
+        NSLog(@"first launch");
+        
+    }
+    
     return YES;
 }
 
@@ -48,6 +77,48 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
     [[DataManager sharedManager] saveContext];
+}
+
+#pragma mark - Remote Notification Delegate // <= iOS 9.x
+
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSLog(@"Device Token = %@", token);
+    self.strDeviceToken = token;
+}
+/*
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    NSLog(@"Push Notification Information : %@",userInfo);
+}
+*/
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    
+}
+
+// This will fire in iOS 10 when the app is foreground or background, but not closed
+- (void) application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void(^)(UIBackgroundFetchResult))completionHandler {
+    // iOS 10 will handle notifications through other methods
+    
+    if (SYSTEM_VERSION_GRATERTHAN_OR_EQUALTO(@"10.0")) {
+        NSLog( @"iOS version >= 10. Let NotificationCenter handle this one." );
+        // set a member variable to tell the new delegate that this is background
+        return;
+    }
+    NSLog( @"HANDLE PUSH, didReceiveRemoteNotification: %@", userInfo );
+    
+    // custom code to handle notification content
+    
+    if( [UIApplication sharedApplication].applicationState == UIApplicationStateInactive ) {
+        NSLog(@"INACTIVE");
+        completionHandler(UIBackgroundFetchResultNewData);
+    } else if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+        NSLog(@"BACKGROUND");
+        completionHandler(UIBackgroundFetchResultNewData);
+    } else {
+        NSLog(@"FOREGROUND");
+        completionHandler(UIBackgroundFetchResultNewData);
+    }
 }
 
 @end

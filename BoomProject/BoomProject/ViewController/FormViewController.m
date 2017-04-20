@@ -34,6 +34,10 @@
     [self.tableView addSubview:self.refreshControl];
     [self.refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
     self.formsArray = [NSMutableArray array];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:YES forKey:@"StaySignedIn"];
+    
     [self getFormsFromCoreData];
     [self getFormsFromServer];
 }
@@ -59,6 +63,19 @@
                                              onFailure:^(NSError *error, NSInteger statusCode) {
                                                  NSLog(@"error = %@, code = %ld", [error localizedDescription], statusCode);
                                              }];
+}
+
+- (void)logOut {
+    [[ServiceManager sharedManager] logOutWithUserToken:@"david"
+                                              onSuccess:^(id result) {
+                                                  //
+                                              }
+                                              onFailure:^(NSError *error, NSInteger statusCode) {
+                                                  //
+                                              }];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:NO forKey:@"StaySignedIn"];
 }
 
 #pragma mark - UITableViewDataSource
@@ -104,6 +121,7 @@
     UIAlertAction *button2 = [UIAlertAction actionWithTitle:@"Log Out"
                                                       style:UIAlertActionStyleDestructive
                                                     handler:^(UIAlertAction * _Nonnull action) {
+                                                        [self logOut];
                                                         [self.navigationController popToRootViewControllerAnimated:YES];
                                                     }];
     UIAlertAction *button3 = [UIAlertAction actionWithTitle:@"Cancle"

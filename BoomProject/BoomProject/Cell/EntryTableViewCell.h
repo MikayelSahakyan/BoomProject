@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EntryTableViewCell : UITableViewCell <UITextViewDelegate>
+@interface EntryTableViewCell : UITableViewCell ///<UITextViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *keyLabel;
 @property (weak, nonatomic) IBOutlet UITextView *valueTextView;
