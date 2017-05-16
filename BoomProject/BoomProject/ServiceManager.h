@@ -43,4 +43,11 @@
                        onSuccess:(void (^)(id result))success
                        onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
 
+- (void)updateEntryWithUserToken:(NSString *)userToken
+                  changedEntryID:(double)entryID
+                        andRowID:(NSString *)rowID
+                      editedText:(NSString *)text
+                       onSuccess:(void (^)(id result))success
+                       onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
+
 @end

@@ -11,14 +11,13 @@
 #import "ServiceManager.h"
 #import "Entry+CoreDataClass.h"
 #import "Row+CoreDataClass.h"
+#import "RowEditingViewController.h"
 
-@interface EntryViewController ()
+@interface EntryViewController () <DataEnteredDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *composeBarButtonItem;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *saveBarButtonItem;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *cancleBarButtonItem;
-@property (strong, nonatomic) NSMutableArray *toolbarButtons;
+@property (strong, nonatomic) NSMutableArray *rowsArray;
+@property (strong, nonatomic) Row *selectedRow;
 @property (assign, nonatomic) BOOL isEditable;
 
 @end
@@ -31,17 +30,29 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationItem.title = self.entry.date;
     
-    self.toolbarButtons = [self.navigationItem.rightBarButtonItems mutableCopy];
-    [self.toolbarButtons removeObject:self.saveBarButtonItem];
-    [self.toolbarButtons removeObject:self.cancleBarButtonItem];
-    [self.navigationItem setRightBarButtonItems:self.toolbarButtons animated:YES];
-    self.rowsArray = [self getRowsArrayFromEntry];
+    NSArray *rows = [self getRowsArrayFromEntry];
+    self.rowsArray = [NSMutableArray array];
+    [self.rowsArray addObjectsFromArray:rows];
     [self viewDidLayoutSubviews];
     
     self.isEditable = NO;
 }
 
 #pragma mark - API
+
+- (void)sendChangedEntryToServer {
+    NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"token"];
+    [[ServiceManager sharedManager] updateEntryWithUserToken:token
+                                              changedEntryID:self.entry.entryID
+                                                    andRowID:self.selectedRow.rowID
+                                                  editedText:self.selectedRow.value
+                                                   onSuccess:^(id result) {
+                                                       //
+                                                   }
+                                                   onFailure:^(NSError *error, NSInteger statusCode) {
+                                                       //
+                                                   }];
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -69,7 +80,7 @@
 
 - (CGFloat)getValueLabelWidth {
     CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
-    CGFloat width = screenWidth - [self getKeyLabelWidth] + 8;
+    CGFloat width = screenWidth - [self getKeyLabelWidth] - 40;
     return width;
 }
 
@@ -85,28 +96,12 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    self.selectedRow = self.rowsArray[indexPath.row];
+    [self performSegueWithIdentifier:@"Row" sender:self];
 }
 
 #pragma mark - IBAction
-
-- (IBAction)composeButtonPressed:(id)sender {
-    [self hideComposeButton];
-    self.isEditable = YES;
-    [self.tableView reloadData];
-}
-
-- (IBAction)saveButtonPressed:(id)sender {
-    [self showComposeButton];
-    self.isEditable = NO;
-    [self.tableView reloadData];
-}
-
-- (IBAction)cancleButtonPressed:(id)sender {
-    [self showComposeButton];
-    self.isEditable = NO;
-    [self.tableView reloadData];
-}
 
 #pragma mark -
 
@@ -120,7 +115,7 @@
 - (void)configureCell:(EntryTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     Row *row = self.rowsArray[indexPath.row];
     
-    cell.keyLabel.text = row.key;
+    cell.keyLabel.text = [NSString stringWithFormat:@"%@:", row.key];
     cell.valueTextView.text = row.value;
     
     if (self.isEditable) {
@@ -132,21 +127,19 @@
     }
 }
 
-- (void)hideComposeButton {
-    if (!([self.toolbarButtons containsObject:self.saveBarButtonItem] && [self.toolbarButtons containsObject:self.cancleBarButtonItem])) {
-        [self.toolbarButtons removeObject:self.composeBarButtonItem];
-        [self.toolbarButtons addObject:self.cancleBarButtonItem];
-        [self.toolbarButtons addObject:self.saveBarButtonItem];
-        [self.navigationItem setRightBarButtonItems:self.toolbarButtons animated:YES];
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"Row"]) {
+        RowEditingViewController *editVC = [segue destinationViewController];
+        editVC.delegate = self;
+        [editVC setRow:self.selectedRow];
     }
 }
 
-- (void)showComposeButton {
-    if (![self.toolbarButtons containsObject:self.composeBarButtonItem]) {
-        [self.toolbarButtons removeAllObjects];
-        [self.toolbarButtons addObject:self.composeBarButtonItem];
-        [self.navigationItem setRightBarButtonItems:self.toolbarButtons animated:YES];
-    }
+- (void)changedRow:(Row *)row {
+    self.selectedRow = row;
+    [self.rowsArray replaceObjectAtIndex:(self.selectedRow.index - 1) withObject:self.selectedRow];
+    [self.tableView reloadData];
+    [self sendChangedEntryToServer];
 }
 
 @end

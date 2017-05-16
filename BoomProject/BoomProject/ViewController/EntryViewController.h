@@ -12,6 +12,5 @@
 @interface EntryViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) Entry *entry;
-@property (strong, nonatomic) NSArray *rowsArray;
 
 @end

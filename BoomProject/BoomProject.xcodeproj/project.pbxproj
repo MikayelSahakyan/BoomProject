@@ -14,11 +14,13 @@
 		4005F2BF1E65F6D80022BAB2 /* FormViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005F2B61E65F6D80022BAB2 /* FormViewController.m */; };
 		4005F2C01E65F6D80022BAB2 /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005F2B81E65F6D80022BAB2 /* InfoViewController.m */; };
 		4005F2C11E65F6D80022BAB2 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005F2BA1E65F6D80022BAB2 /* LoginViewController.m */; };
-		4005F2C21E65F6D80022BAB2 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005F2BC1E65F6D80022BAB2 /* SettingsViewController.m */; };
 		4005F2CA1E65F6F40022BAB2 /* EntriesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005F2C51E65F6F40022BAB2 /* EntriesTableViewCell.m */; };
 		4005F2CB1E65F6F40022BAB2 /* EntryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005F2C71E65F6F40022BAB2 /* EntryTableViewCell.m */; };
 		4005F2CC1E65F6F40022BAB2 /* FormTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005F2C91E65F6F40022BAB2 /* FormTableViewCell.m */; };
 		40104D951E5B077900688B2F /* ServiceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 40104D941E5B077900688B2F /* ServiceManager.m */; };
+		4042DB5A1EB75A5100927A5E /* ReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4042DB591EB75A5100927A5E /* ReachabilityManager.m */; };
+		4042DB5C1EB75B4100927A5E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4042DB5B1EB75B4100927A5E /* SystemConfiguration.framework */; };
+		4042DB601EB8BB1A00927A5E /* RowEditingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4042DB5F1EB8BB1A00927A5E /* RowEditingViewController.m */; };
 		40E516611E8E5D7E0045F20C /* Form+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E516521E8E5D7E0045F20C /* Form+CoreDataClass.m */; };
 		40E516621E8E5D7E0045F20C /* Form+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E516541E8E5D7E0045F20C /* Form+CoreDataProperties.m */; };
 		40E516631E8E5D7E0045F20C /* ServiceObject+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E516561E8E5D7E0045F20C /* ServiceObject+CoreDataClass.m */; };
@@ -48,8 +50,6 @@
 		4005F2B81E65F6D80022BAB2 /* InfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoViewController.m; sourceTree = "<group>"; };
 		4005F2B91E65F6D80022BAB2 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		4005F2BA1E65F6D80022BAB2 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		4005F2BB1E65F6D80022BAB2 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
-		4005F2BC1E65F6D80022BAB2 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		4005F2C41E65F6F40022BAB2 /* EntriesTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntriesTableViewCell.h; sourceTree = "<group>"; };
 		4005F2C51E65F6F40022BAB2 /* EntriesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntriesTableViewCell.m; sourceTree = "<group>"; };
 		4005F2C61E65F6F40022BAB2 /* EntryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntryTableViewCell.h; sourceTree = "<group>"; };
@@ -58,6 +58,11 @@
 		4005F2C91E65F6F40022BAB2 /* FormTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormTableViewCell.m; sourceTree = "<group>"; };
 		40104D931E5B077900688B2F /* ServiceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceManager.h; sourceTree = "<group>"; };
 		40104D941E5B077900688B2F /* ServiceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceManager.m; sourceTree = "<group>"; };
+		4042DB581EB75A5100927A5E /* ReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReachabilityManager.h; sourceTree = "<group>"; };
+		4042DB591EB75A5100927A5E /* ReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReachabilityManager.m; sourceTree = "<group>"; };
+		4042DB5B1EB75B4100927A5E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		4042DB5E1EB8BB1A00927A5E /* RowEditingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RowEditingViewController.h; sourceTree = "<group>"; };
+		4042DB5F1EB8BB1A00927A5E /* RowEditingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RowEditingViewController.m; sourceTree = "<group>"; };
 		40E516511E8E5D7E0045F20C /* Form+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Form+CoreDataClass.h"; sourceTree = "<group>"; };
 		40E516521E8E5D7E0045F20C /* Form+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Form+CoreDataClass.m"; sourceTree = "<group>"; };
 		40E516531E8E5D7E0045F20C /* Form+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Form+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -93,6 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4042DB5C1EB75B4100927A5E /* SystemConfiguration.framework in Frameworks */,
 				339B67358E4DCAC275F7A423 /* libPods-BoomProject.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -128,8 +134,6 @@
 			children = (
 				4005F2B91E65F6D80022BAB2 /* LoginViewController.h */,
 				4005F2BA1E65F6D80022BAB2 /* LoginViewController.m */,
-				4005F2BB1E65F6D80022BAB2 /* SettingsViewController.h */,
-				4005F2BC1E65F6D80022BAB2 /* SettingsViewController.m */,
 				4005F2B71E65F6D80022BAB2 /* InfoViewController.h */,
 				4005F2B81E65F6D80022BAB2 /* InfoViewController.m */,
 				4005F2B51E65F6D80022BAB2 /* FormViewController.h */,
@@ -138,6 +142,8 @@
 				4005F2B21E65F6D80022BAB2 /* EntriesViewController.m */,
 				4005F2B31E65F6D80022BAB2 /* EntryViewController.h */,
 				4005F2B41E65F6D80022BAB2 /* EntryViewController.m */,
+				4042DB5E1EB8BB1A00927A5E /* RowEditingViewController.h */,
+				4042DB5F1EB8BB1A00927A5E /* RowEditingViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -185,6 +191,8 @@
 				40104D941E5B077900688B2F /* ServiceManager.m */,
 				4004EF181E802DFA00483C57 /* DataManager.h */,
 				4004EF191E802DFA00483C57 /* DataManager.m */,
+				4042DB581EB75A5100927A5E /* ReachabilityManager.h */,
+				4042DB591EB75A5100927A5E /* ReachabilityManager.m */,
 				40F9A8E41E3A12F3002D1219 /* Main.storyboard */,
 				40F9A8EA1E3A12F3002D1219 /* Assets.xcassets */,
 				40F9A8EC1E3A12F3002D1219 /* LaunchScreen.storyboard */,
@@ -206,6 +214,7 @@
 		9585A7F51FCFD800C5E81078 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4042DB5B1EB75B4100927A5E /* SystemConfiguration.framework */,
 				63458ACBD414A61E94B9DFDB /* libPods-BoomProject.a */,
 			);
 			name = Frameworks;
@@ -343,6 +352,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4042DB601EB8BB1A00927A5E /* RowEditingViewController.m in Sources */,
 				40E516631E8E5D7E0045F20C /* ServiceObject+CoreDataClass.m in Sources */,
 				4005F2BD1E65F6D80022BAB2 /* EntriesViewController.m in Sources */,
 				4005F2CC1E65F6F40022BAB2 /* FormTableViewCell.m in Sources */,
@@ -356,9 +366,9 @@
 				40F9A8E01E3A12F3002D1219 /* AppDelegate.m in Sources */,
 				4005F2C11E65F6D80022BAB2 /* LoginViewController.m in Sources */,
 				40E516671E8E5D7E0045F20C /* Entry+CoreDataClass.m in Sources */,
+				4042DB5A1EB75A5100927A5E /* ReachabilityManager.m in Sources */,
 				4005F2BF1E65F6D80022BAB2 /* FormViewController.m in Sources */,
 				40E516681E8E5D7E0045F20C /* Entry+CoreDataProperties.m in Sources */,
-				4005F2C21E65F6D80022BAB2 /* SettingsViewController.m in Sources */,
 				40E516661E8E5D7E0045F20C /* Row+CoreDataProperties.m in Sources */,
 				40E516641E8E5D7E0045F20C /* ServiceObject+CoreDataProperties.m in Sources */,
 				40E516651E8E5D7E0045F20C /* Row+CoreDataClass.m in Sources */,
@@ -485,6 +495,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 49W3Q6WK7W;
 				INFOPLIST_FILE = BoomProject/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = am.BoomProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -498,6 +509,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 49W3Q6WK7W;
 				INFOPLIST_FILE = BoomProject/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = am.BoomProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";

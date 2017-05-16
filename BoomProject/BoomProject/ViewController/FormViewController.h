@@ -10,4 +10,6 @@
 
 @interface FormViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
+@property (strong, nonatomic) NSMutableArray *formsArray;
+
 @end

@@ -236,4 +236,35 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
        }];
 }
 
+- (void)updateEntryWithUserToken:(NSString *)userToken
+                  changedEntryID:(double)entryID
+                        andRowID:(NSString *)rowID
+                      editedText:(NSString *)text
+                       onSuccess:(void (^)(id result))success
+                       onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
+    
+    NSDictionary *params = @{@"user_token"      : userToken,
+                             @"firebase_token"  : kLoginFirebaseToken,
+                             @"entry_id"        : @(entryID),
+                             @"row_id"          : rowID,
+                             @"edit"            : text};
+    [self POST:kHostSettingsURL
+    parameters:params
+      progress:nil
+       success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+           NSLog(@"JSON:%@", responseObject);
+           if (success) {
+               success(responseObject);
+           }
+       }
+       failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+           NSHTTPURLResponse *respone = (NSHTTPURLResponse *)task.response;
+           NSInteger statusCode = [respone statusCode];
+           NSLog(@"Error:%@", error);
+           if (failure) {
+               failure(error, statusCode);
+           }
+       }];
+}
+
 @end

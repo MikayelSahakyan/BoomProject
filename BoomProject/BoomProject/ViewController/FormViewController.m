@@ -12,13 +12,16 @@
 #import "ServiceManager.h"
 #import "DataManager.h"
 #import "Form+CoreDataClass.h"
+#import <Reachability/Reachability.h>
+#import "AppDelegate.h"
+#import "ReachabilityManager.h"
 
 @interface FormViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
-@property (strong, nonatomic) NSMutableArray *formsArray;
 @property (strong, nonatomic) Form *currentForm;
+@property (strong, nonatomic) Reachability *internetReachableFoo;
 
 @end
 
@@ -26,6 +29,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:YES forKey:@"StaySignedIn"];
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
@@ -35,12 +41,42 @@
     [self.refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
     self.formsArray = [NSMutableArray array];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:YES forKey:@"StaySignedIn"];
-    
-    [self getFormsFromCoreData];
-    [self getFormsFromServer];
+    //[self testInternetConnection];
+    //[self getFormsFromCoreData];
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self getFormsFromCoreData];
+}
+
+#pragma mark - Reachability
+/*
+// Checks if we have an internet connection or not
+- (void)testInternetConnection {
+    self.internetReachableFoo = [Reachability reachabilityWithHostname:@"www.google.com"];
+    
+    // Internet is reachable
+    self.internetReachableFoo.reachableBlock = ^(Reachability *reach) {
+        // Update the UI on the main thread
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Yayyy, we have the interwebs!");
+            [self getFormsFromServer];
+        });
+    };
+    
+    // Internet is not reachable
+    self.internetReachableFoo.unreachableBlock = ^(Reachability*reach) {
+        // Update the UI on the main thread
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Someone broke the internet :(");
+            [self getFormsFromCoreData];
+        });
+    };
+    
+    [self.internetReachableFoo startNotifier];
+}
+*/
 
 #pragma mark - CoreData
 
@@ -49,24 +85,33 @@
     NSArray *forms = [[DataManager sharedManager] allForms];
     [self.formsArray addObjectsFromArray:forms];
     [self.tableView reloadData];
+    [self loadFormsWithCompletion:nil];
 }
 
 #pragma mark - API
 
-- (void)getFormsFromServer {
-    [[ServiceManager sharedManager] loginWithUserToken:@"david"
+- (void)loadFormsWithCompletion:(void (^)())completion {
+    NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"token"];
+    [[ServiceManager sharedManager] loginWithUserToken:token
                                              onSuccess:^(NSArray *forms) {
+                                                 if (completion) {
+                                                     completion();
+                                                 }
                                                  [self.formsArray removeAllObjects];
                                                  [self.formsArray addObjectsFromArray:forms];
                                                  [self.tableView reloadData];
                                              }
                                              onFailure:^(NSError *error, NSInteger statusCode) {
+                                                 if (completion) {
+                                                     completion();
+                                                 }
                                                  NSLog(@"error = %@, code = %ld", [error localizedDescription], statusCode);
                                              }];
 }
 
 - (void)logOut {
-    [[ServiceManager sharedManager] logOutWithUserToken:@"david"
+    NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"token"];
+    [[ServiceManager sharedManager] logOutWithUserToken:token
                                               onSuccess:^(id result) {
                                                   //
                                               }
@@ -76,6 +121,7 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:NO forKey:@"StaySignedIn"];
+    [defaults removeObjectForKey:@"token"];
 }
 
 #pragma mark - UITableViewDataSource
@@ -89,13 +135,13 @@
     FormTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FormCell" forIndexPath:indexPath];
     Form *form = [self.formsArray objectAtIndex:indexPath.row];
     cell.formLabel.text = [NSString stringWithFormat:@"%@", form.name];
-    
     return cell;
 }
 
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
     self.currentForm = [self.formsArray objectAtIndex:indexPath.row];
     [self performSegueWithIdentifier:@"Entries" sender:self];
 }
@@ -109,8 +155,7 @@
     UIAlertAction *button0 = [UIAlertAction actionWithTitle:@"Settings"
                                                       style:UIAlertActionStyleDefault
                                                     handler:^(UIAlertAction * _Nonnull action) {
-                                                        UIViewController *settingsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"settings"];
-                                                        [self.navigationController pushViewController:settingsVC animated:YES];
+                                                        [self openScheme:UIApplicationOpenSettingsURLString];
                                                     }];
     UIAlertAction *button1 = [UIAlertAction actionWithTitle:@"About"
                                                       style:UIAlertActionStyleDefault
@@ -122,26 +167,50 @@
                                                       style:UIAlertActionStyleDestructive
                                                     handler:^(UIAlertAction * _Nonnull action) {
                                                         [self logOut];
-                                                        [self.navigationController popToRootViewControllerAnimated:YES];
+                                                        //[self.navigationController popToRootViewControllerAnimated:YES];
+                                                        [self performSegueWithIdentifier:@"LogOutFromFormSegue" sender:self];
                                                     }];
     UIAlertAction *button3 = [UIAlertAction actionWithTitle:@"Cancle"
                                                       style:UIAlertActionStyleCancel
                                                     handler:^(UIAlertAction * _Nonnull action) {
                                                         //
                                                     }];
-    
     [actionSheet addAction:button0];
     [actionSheet addAction:button1];
     [actionSheet addAction:button2];
     [actionSheet addAction:button3];
-    
     [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
 #pragma mark -
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)openScheme:(NSString *)scheme {
+    UIApplication *application = [UIApplication sharedApplication];
+    NSURL *URL = [NSURL URLWithString:scheme];
     
+    if ([application respondsToSelector:@selector(openURL:options:completionHandler:)]) {
+        [application openURL:URL options:@{}
+           completionHandler:^(BOOL success) {
+               NSLog(@"Open %@: %d",scheme,success);
+           }];
+    } else {
+        BOOL success = [application openURL:URL];
+        NSLog(@"Open %@: %d",scheme,success);
+    }
+}
+
+- (void)logOutErrorAlert {
+    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:@"Ooooops"
+                                                                        message:@"No Connection!\nSorry, but you can't be logged out!!!"
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK"
+                                                 style:UIAlertActionStyleDefault
+                                               handler:nil];
+    [errorAlert addAction:ok];
+    [self presentViewController:errorAlert animated:YES completion:nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"Entries"]) {
         EntriesViewController *entriesVC = [segue destinationViewController];
         [entriesVC setForm:self.currentForm];
@@ -149,8 +218,9 @@
 }
 
 - (void)refreshTable {
-    [self.refreshControl endRefreshing];
-    [self.tableView reloadData];
+    [self loadFormsWithCompletion:^{
+        [self.refreshControl endRefreshing];
+    }];
 }
 
 @end

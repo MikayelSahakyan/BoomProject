@@ -21,13 +21,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [[UIApplication sharedApplication] registerForRemoteNotifications];
-    
-    [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
-        if ([settings authorizationStatus] == UNAuthorizationStatusNotDetermined) {
-            [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error) {
-                //
-            }];
-        }
+    [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+        //
     }];
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"StaySignedIn"]) {
@@ -35,18 +30,18 @@
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UIViewController *formVC = [storyboard instantiateViewControllerWithIdentifier:@"form"];
         UINavigationController *navigationController = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"navigation"];
+        //[navigationController setViewControllers:@[formVC]];
         [navigationController pushViewController:formVC animated:NO];
         self.window.rootViewController = navigationController;
     } else {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UIViewController *loginVC = [storyboard instantiateViewControllerWithIdentifier:@"login"];
         UINavigationController *navigationController = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"navigation"];
+        //[navigationController setViewControllers:@[loginVC]];
         [navigationController pushViewController:loginVC animated:NO];
         self.window.rootViewController = navigationController;
         NSLog(@"first launch");
-        
     }
-    
     return YES;
 }
 
@@ -79,13 +74,12 @@
     [[DataManager sharedManager] saveContext];
 }
 
-#pragma mark - Remote Notification Delegate // <= iOS 9.x
-
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSLog(@"Device Token = %@", token);
     self.strDeviceToken = token;
+    // Send Token to server
 }
 /*
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
@@ -94,10 +88,11 @@
 */
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
+    
 }
 
 // This will fire in iOS 10 when the app is foreground or background, but not closed
-- (void) application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void(^)(UIBackgroundFetchResult))completionHandler {
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void(^)(UIBackgroundFetchResult))completionHandler {
     // iOS 10 will handle notifications through other methods
     
     if (SYSTEM_VERSION_GRATERTHAN_OR_EQUALTO(@"10.0")) {

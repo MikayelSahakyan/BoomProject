@@ -7,7 +7,7 @@
 //
 
 #import "Entry+CoreDataClass.h"
-#import "Form.h"
+#import "Form+CoreDataClass.h"
 
 @implementation Entry
 

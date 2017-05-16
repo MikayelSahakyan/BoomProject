@@ -30,7 +30,7 @@
     
     CGFloat offset = 10.0;
     
-    UIFont *font = [UIFont systemFontOfSize:20.f];
+    UIFont *font = [UIFont systemFontOfSize:18.0];
     
     NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
     [paragraph setLineBreakMode:NSLineBreakByCharWrapping];
@@ -44,14 +44,14 @@
                                         options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
                                      attributes:attributes context:nil];
     
-    return CGRectGetHeight(rect) + 2 * offset;
+    return CGRectGetHeight(rect) + 3 * offset;
 }
 
 + (CGFloat)heightForValue:(NSString *)valueText width:(CGFloat)width {
     
     CGFloat offset = 8.0;
     
-    UIFont *font = [UIFont systemFontOfSize:20.f];
+    UIFont *font = [UIFont systemFontOfSize:18.0];
     
     NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
     [paragraph setLineBreakMode:NSLineBreakByCharWrapping];
@@ -65,25 +65,7 @@
                                           options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
                                        attributes:attributes context:nil];
     
-    return CGRectGetHeight(rect) + 2 * offset;
+    return CGRectGetHeight(rect) + 4 * offset;
 }
-
- - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
- 
- return YES;
- }
- - (BOOL)textViewShouldEndEditing:(UITextView *)textView {
- 
- return YES;
- }
- 
- - (void)textViewDidBeginEditing:(UITextView *)textView {
- 
- }
- 
- - (void)textViewDidEndEditing:(UITextView *)textView {
- 
- }
- 
  
 @end

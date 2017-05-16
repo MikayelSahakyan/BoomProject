@@ -18,17 +18,12 @@
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, readonly) NSPersistentContainer *persistentContainer;
 
-- (Row *)addRow:(NSDictionary *)responseObject;
-- (Entry *)addEntry:(NSDictionary *)responseObject;
-- (Form *)addForm:(NSDictionary *)responseObject;
-
 - (NSArray *)allObjects;
 - (NSArray *)allForms;
 - (NSArray *)allEntriesFromForm:(Form *)form;
 - (void)printAllForms;
 - (void)printAllObjects;
 - (void)deleteAllForms;
-//- (void)deleteAllEntries;
 - (void)saveContext;
 
 + (DataManager *)sharedManager;

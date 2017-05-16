@@ -34,31 +34,6 @@
     return self;
 }
 
-- (Row *)addRow:(NSDictionary *)responseObject{
-    NSManagedObjectContext *context = self.persistentContainer.viewContext;
-    Row *row = [NSEntityDescription insertNewObjectForEntityForName:@"Row" inManagedObjectContext:context];
-    row.key = [responseObject objectForKey:@"key"];
-    row.value = [responseObject objectForKey:@"value"];
-    row.rowID = [responseObject objectForKey:@"row_id"];
-    return row;
-}
-
-- (Entry *)addEntry:(NSDictionary *)responseObject {
-    NSManagedObjectContext *context = self.persistentContainer.viewContext;
-    Entry *entry = [NSEntityDescription insertNewObjectForEntityForName:@"Entry" inManagedObjectContext:context];
-    entry.entryID = [[responseObject objectForKey:@"id"] doubleValue];
-    entry.date = [responseObject objectForKey:@"date"];
-    return entry;
-}
-
-- (Form *)addForm:(NSDictionary *)responseObject {
-    NSManagedObjectContext *context = self.persistentContainer.viewContext;
-    Form *form = [NSEntityDescription insertNewObjectForEntityForName:@"Form" inManagedObjectContext:context];
-    form.name = [responseObject objectForKey:@"name"];
-    form.formID = [responseObject objectForKey:@"id"];
-    return form;
-}
-
 - (NSArray *)allObjects {
     NSManagedObjectContext *context = self.persistentContainer.viewContext;
     NSFetchRequest *request = [ServiceObject fetchRequest];
@@ -74,6 +49,8 @@
     NSManagedObjectContext *context = self.persistentContainer.viewContext;
     NSFetchRequest *request = [Form fetchRequest];
     NSError *requestError = nil;
+    NSSortDescriptor *indexDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+    [request setSortDescriptors:@[indexDescriptor]];
     NSArray *resultArray = [context executeFetchRequest:request error:&requestError];
     if (requestError) {
         NSLog(@"%@", [requestError localizedDescription]);
@@ -84,7 +61,7 @@
 - (NSArray *)allEntriesFromForm:(Form *)form {
     NSManagedObjectContext *context = self.persistentContainer.viewContext;
     NSFetchRequest *request = [Entry fetchRequest];
-    NSSortDescriptor *indexDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+    NSSortDescriptor *indexDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"form.formID == %@", form.formID];
     [request setSortDescriptors:@[indexDescriptor]];
     [request setPredicate:predicate];
@@ -117,10 +94,10 @@
     [self printArray:allForms];
 }
 
- - (void)printAllObjects {
- NSArray *allEntries = [self allObjects];
- [self printArray:allEntries];
- }
+- (void)printAllObjects {
+    NSArray *allEntries = [self allObjects];
+    [self printArray:allEntries];
+}
 
 - (void)deleteAllForms {
     NSManagedObjectContext *context = self.persistentContainer.viewContext;
@@ -130,16 +107,7 @@
     }
     [self saveContext];
 }
-/*
- - (void)deleteAllEntries {
- NSManagedObjectContext *context = self.persistentContainer.viewContext;
- NSArray *allEntries = [self allEntries];
- for (id object in allEntries) {
- [context deleteObject:object];
- }
- [self saveContext];
- }
- */
+
 #pragma mark - Core Data stack
 
 @synthesize persistentContainer = _persistentContainer;
