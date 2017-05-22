@@ -17,6 +17,7 @@
 		4005F2CA1E65F6F40022BAB2 /* EntriesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005F2C51E65F6F40022BAB2 /* EntriesTableViewCell.m */; };
 		4005F2CB1E65F6F40022BAB2 /* EntryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005F2C71E65F6F40022BAB2 /* EntryTableViewCell.m */; };
 		4005F2CC1E65F6F40022BAB2 /* FormTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005F2C91E65F6F40022BAB2 /* FormTableViewCell.m */; };
+		400A673A1ED0D9DE0092437A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 400A67391ED0D9DE0092437A /* GoogleService-Info.plist */; };
 		40104D951E5B077900688B2F /* ServiceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 40104D941E5B077900688B2F /* ServiceManager.m */; };
 		4042DB5A1EB75A5100927A5E /* ReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4042DB591EB75A5100927A5E /* ReachabilityManager.m */; };
 		4042DB5C1EB75B4100927A5E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4042DB5B1EB75B4100927A5E /* SystemConfiguration.framework */; };
@@ -56,6 +57,8 @@
 		4005F2C71E65F6F40022BAB2 /* EntryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntryTableViewCell.m; sourceTree = "<group>"; };
 		4005F2C81E65F6F40022BAB2 /* FormTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormTableViewCell.h; sourceTree = "<group>"; };
 		4005F2C91E65F6F40022BAB2 /* FormTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormTableViewCell.m; sourceTree = "<group>"; };
+		400A67381ED0D6F50092437A /* BoomProject.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BoomProject.entitlements; sourceTree = "<group>"; };
+		400A67391ED0D9DE0092437A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40104D931E5B077900688B2F /* ServiceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceManager.h; sourceTree = "<group>"; };
 		40104D941E5B077900688B2F /* ServiceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceManager.m; sourceTree = "<group>"; };
 		4042DB581EB75A5100927A5E /* ReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReachabilityManager.h; sourceTree = "<group>"; };
@@ -182,6 +185,7 @@
 		40F9A8DA1E3A12F3002D1219 /* BoomProject */ = {
 			isa = PBXGroup;
 			children = (
+				400A67381ED0D6F50092437A /* BoomProject.entitlements */,
 				4004EF051E8029D200483C57 /* ManagedObjectModel */,
 				4005F2B01E65F6D80022BAB2 /* ViewController */,
 				4005F2C31E65F6F40022BAB2 /* Cell */,
@@ -196,6 +200,7 @@
 				40F9A8E41E3A12F3002D1219 /* Main.storyboard */,
 				40F9A8EA1E3A12F3002D1219 /* Assets.xcassets */,
 				40F9A8EC1E3A12F3002D1219 /* LaunchScreen.storyboard */,
+				400A67391ED0D9DE0092437A /* GoogleService-Info.plist */,
 				40F9A8EF1E3A12F3002D1219 /* Info.plist */,
 				40F9A8E71E3A12F3002D1219 /* BoomProject.xcdatamodeld */,
 				40F9A8DB1E3A12F3002D1219 /* Supporting Files */,
@@ -263,8 +268,13 @@
 				TargetAttributes = {
 					40F9A8D71E3A12F3002D1219 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 49W3Q6WK7W;
-						ProvisioningStyle = Automatic;
+						DevelopmentTeam = U3LX4WWTK4;
+						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -292,6 +302,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				40F9A8EE1E3A12F3002D1219 /* LaunchScreen.storyboard in Resources */,
+				400A673A1ED0D9DE0092437A /* GoogleService-Info.plist in Resources */,
 				40F9A8EB1E3A12F3002D1219 /* Assets.xcassets in Resources */,
 				40F9A8E61E3A12F3002D1219 /* Main.storyboard in Resources */,
 			);
@@ -493,12 +504,16 @@
 			baseConfigurationReference = CAB56724C070352C068DE274 /* Pods-BoomProject.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 49W3Q6WK7W;
+				CODE_SIGN_ENTITLEMENTS = BoomProject/BoomProject.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = U3LX4WWTK4;
 				INFOPLIST_FILE = BoomProject/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = am.BoomProject;
+				PRODUCT_BUNDLE_IDENTIFIER = com.boomform.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "093005ca-6ec3-4ab2-a8d3-5c83dfef716b";
+				PROVISIONING_PROFILE_SPECIFIER = "Boom Dev";
 			};
 			name = Debug;
 		};
@@ -507,12 +522,16 @@
 			baseConfigurationReference = E8C5435DE152BD3259FB1A8A /* Pods-BoomProject.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 49W3Q6WK7W;
+				CODE_SIGN_ENTITLEMENTS = BoomProject/BoomProject.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = U3LX4WWTK4;
 				INFOPLIST_FILE = BoomProject/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = am.BoomProject;
+				PRODUCT_BUNDLE_IDENTIFIER = com.boomform.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "7a340706-4e43-4a93-b08e-b568a9b8294d";
+				PROVISIONING_PROFILE_SPECIFIER = "Boom Adhoc";
 			};
 			name = Release;
 		};

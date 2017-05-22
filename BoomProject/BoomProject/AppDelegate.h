@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <UserNotifications/UserNotifications.h>
+#import <Firebase/Firebase.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate, FIRMessagingDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) NSString *strDeviceToken;
