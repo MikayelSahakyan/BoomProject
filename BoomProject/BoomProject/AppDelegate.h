@@ -13,7 +13,6 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate, FIRMessagingDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) NSString *strDeviceToken;
 
 @end
 

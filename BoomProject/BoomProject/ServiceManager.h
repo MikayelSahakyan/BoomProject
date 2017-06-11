@@ -24,24 +24,21 @@
                       onSuccess:(void (^)(NSArray *entries))success
                       onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
 
-- (void)removeEntryWithUserToken:(NSString *)userToken
-               andRemovedEntryID:(double)entryID
-                       onSuccess:(void (^)(id result))success
-                       onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
+- (void)updateEntriesWithUserToken:(NSString *)userToken
+                   fromCurrentForm:(Form *)form
+                       lastEntryID:(double)entryID
+                         onSuccess:(void (^)(NSArray *entries))success
+                         onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
+
+- (void)removeEntryFromForm:(Form *)form
+              WithUserToken:(NSString *)userToken
+          andRemovedEntryID:(double)entryID
+                  onSuccess:(void (^)(id result))success
+                  onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
 
 - (void)logOutWithUserToken:(NSString *)userToken
                   onSuccess:(void (^)(id result))success
                   onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
-
-- (void)changeNotificationWithUserToken:(NSString *)userToken
-            andNotificationStatusChange:(NSInteger)change
-                              onSuccess:(void (^)(id result))success
-                              onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
-
-- (void)changeSoundWithUserToken:(NSString *)userToken
-            andSoundStatusChange:(NSInteger)change
-                       onSuccess:(void (^)(id result))success
-                       onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
 
 - (void)updateEntryWithUserToken:(NSString *)userToken
                   changedEntryID:(double)entryID

@@ -1,7 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -16,12 +19,54 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Boom" translatesAutoresizingMaskIntoConstraints="NO" id="se8-kX-gEK">
+                                <rect key="frame" x="43" y="72" width="288" height="230"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="230" id="9Xa-Ie-9oe"/>
+                                    <constraint firstAttribute="width" constant="288" id="wCQ-oa-6bt"/>
+                                </constraints>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dHg-TF-0wX" userLabel="Blue View">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+                                <subviews>
+                                    <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="frU-Pi-StN">
+                                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                        <color key="barTintColor" red="0.0" green="0.4549019608" blue="0.81176470590000005" alpha="1" colorSpace="calibratedRGB"/>
+                                        <textAttributes key="titleTextAttributes">
+                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </textAttributes>
+                                        <items>
+                                            <navigationItem title="Boom Form" id="jmB-Ox-gFg"/>
+                                        </items>
+                                    </navigationBar>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.4549019608" blue="0.81176470590000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="frU-Pi-StN" secondAttribute="trailing" id="VwL-C9-Vu7"/>
+                                    <constraint firstItem="frU-Pi-StN" firstAttribute="top" secondItem="dHg-TF-0wX" secondAttribute="top" constant="20" id="Xfc-zv-mfm"/>
+                                    <constraint firstAttribute="bottom" secondItem="frU-Pi-StN" secondAttribute="bottom" id="yIH-e0-Ty9"/>
+                                    <constraint firstItem="frU-Pi-StN" firstAttribute="leading" secondItem="dHg-TF-0wX" secondAttribute="leading" id="zNF-Dk-LZv"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.9332516193" green="0.93338567019999996" blue="0.93322223419999994" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="se8-kX-gEK" firstAttribute="top" secondItem="dHg-TF-0wX" secondAttribute="bottom" constant="8" id="96U-U4-w5w"/>
+                            <constraint firstItem="dHg-TF-0wX" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="O0X-Ew-Yf7"/>
+                            <constraint firstItem="se8-kX-gEK" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Qpq-O3-p7H"/>
+                            <constraint firstItem="dHg-TF-0wX" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="oMJ-mh-Oyu"/>
+                            <constraint firstAttribute="trailing" secondItem="dHg-TF-0wX" secondAttribute="trailing" id="sbP-MW-67N"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Boom" width="288" height="230"/>
+    </resources>
 </document>

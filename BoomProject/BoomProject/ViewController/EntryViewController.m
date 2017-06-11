@@ -64,13 +64,31 @@
     
     EntryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EntryCell" forIndexPath:indexPath];
     [self configureCell:cell forRowAtIndexPath:indexPath];
-    
     return cell;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
+
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    Row *row = self.rowsArray[indexPath.row];
+    CGFloat keyWidth = [self getKeyLabelWidth];
+    CGFloat valueWidth = [self getValueLabelWidth];
+    CGFloat heightForKey = [EntryTableViewCell heightForKey:row.key width:keyWidth];
+    CGFloat heightForValue = [EntryTableViewCell heightForValue:row.value width:valueWidth];
+    return MAX(heightForKey, heightForValue);
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    self.selectedRow = self.rowsArray[indexPath.row];
+    [self performSegueWithIdentifier:@"Row" sender:self];
+}
+
+#pragma mark -
 
 - (CGFloat)getKeyLabelWidth {
     CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
@@ -83,27 +101,6 @@
     CGFloat width = screenWidth - [self getKeyLabelWidth] - 40;
     return width;
 }
-
-#pragma mark - UITableViewDelegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    Row *row = self.rowsArray[indexPath.row];
-    CGFloat keyWidth = [self getKeyLabelWidth];
-    CGFloat valueWidth = [self getValueLabelWidth];
-    CGFloat heightForKey = [EntryTableViewCell heightForKey:row.key width:keyWidth];
-    CGFloat heightForValue = [EntryTableViewCell heightForValue:row.value width:valueWidth];
-    return MAX(heightForKey, heightForValue);// + 20;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    self.selectedRow = self.rowsArray[indexPath.row];
-    [self performSegueWithIdentifier:@"Row" sender:self];
-}
-
-#pragma mark - IBAction
-
-#pragma mark -
 
 - (NSArray *)getRowsArrayFromEntry {
     NSArray *arrayOfRows = self.entry.rows.allObjects;

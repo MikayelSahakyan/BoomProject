@@ -12,5 +12,6 @@
 @interface EntriesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) Form *form;
+@property (assign, nonatomic) double notifyEntryID;
 
 @end

@@ -108,6 +108,26 @@
     [self saveContext];
 }
 
+- (void)deleteAllEntriesFromForm:(Form *)form {
+    NSManagedObjectContext *context = self.persistentContainer.viewContext;
+    NSArray *allEntries = [self allEntriesFromForm:form];
+    for (id object in allEntries) {
+        [context deleteObject:object];
+    }
+    [self saveContext];
+}
+
+- (void)removeEntryFromForm:(Form *)form withID:(double)entryID {
+    NSManagedObjectContext *context = self.persistentContainer.viewContext;
+    NSArray *allEntries = [self allEntriesFromForm:form];
+    for (Entry *entry in allEntries) {
+        if (entry.entryID == entryID) {
+            [context deleteObject:entry];
+        }
+    }
+    [self saveContext];
+}
+
 #pragma mark - Core Data stack
 
 @synthesize persistentContainer = _persistentContainer;

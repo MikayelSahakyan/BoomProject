@@ -14,7 +14,6 @@
 @interface LoginViewController ()
 
 @property (weak, nonatomic) IBOutlet UITextField *tokenTextField;
-@property (strong, nonatomic) NSMutableArray *forms;
 
 @end
 
@@ -22,9 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.forms = [NSMutableArray array];
-    
+        
     // Add GestureRecognizers
     UITapGestureRecognizer *tapTwo = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                              action:@selector(doubleTap)];
@@ -67,32 +64,26 @@
 #pragma mark - Methods for GestureRecognizer
 
 - (void)singleTap {
-    NSLog(@"Tapped Once");
     [self.tokenTextField resignFirstResponder];
 }
 
 - (void)doubleTap {
-    NSLog(@"Tapped Twice");
     [self.tokenTextField resignFirstResponder];
 }
 
 - (void)swipeDown {
-    NSLog(@"Swiped Down");
     [self.tokenTextField resignFirstResponder];
 }
 
 - (void)swipeUp {
-    NSLog(@"Swiped Up");
     [self.tokenTextField resignFirstResponder];
 }
 
 - (void)swipeLeft {
-    NSLog(@"Swiped Left");
     [self.tokenTextField resignFirstResponder];
 }
 
 - (void)swipeRight {
-    NSLog(@"Swiped Right");
     [self.tokenTextField resignFirstResponder];
 }
 
@@ -119,33 +110,38 @@
     return YES;
 }
 
+// Check token and availability of internet
 - (void)getFormsFromServer {
     NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"token"];
     [[ServiceManager sharedManager] loginWithUserToken:token
                                              onSuccess:^(NSArray *forms) {
                                                  if (!(forms.count == 0)) {
-                                                     [self.forms addObjectsFromArray:forms];
                                                      [self performSegueWithIdentifier:@"Login" sender:nil];
                                                  } else {
-                                                     [self loginErrorAlert];
+                                                     [self tokenErrorAlert];
                                                  }
                                              }
                                              onFailure:^(NSError *error, NSInteger statusCode) {
-                                                 [self loginErrorAlert];
+                                                 [self connectionErrorAlert];
                                                  NSLog(@"error = %@, code = %ld", [error localizedDescription], statusCode);
                                              }];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"Login"]) {
-        FormViewController *formVC = [segue destinationViewController];
-        [formVC setFormsArray:self.forms];
-    }
+// Error alerts
+- (void)tokenErrorAlert {
+    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:@"Boooom"
+                                                                        message:@"Invalid token!"
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK"
+                                                 style:UIAlertActionStyleDefault
+                                               handler:nil];
+    [errorAlert addAction:ok];
+    [self presentViewController:errorAlert animated:YES completion:nil];
 }
 
-- (void)loginErrorAlert {
-    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:@"Ooooops"
-                                                                        message:@"Wrong token or No connection!!!"
+- (void)connectionErrorAlert {
+    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:@"Boooom"
+                                                                        message:@"Connection problem!"
                                                                  preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK"
                                                  style:UIAlertActionStyleDefault

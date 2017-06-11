@@ -25,6 +25,7 @@
 @property (strong, nonatomic) Entry *currentEntry;
 @property (strong, nonatomic) NSMutableArray *currentEntryArray;
 @property (strong, nonatomic) NSMutableArray *sendedEntryArray;
+@property (weak, nonatomic) IBOutlet UIView *loadingView;
 
 @end
 
@@ -50,11 +51,25 @@
     [self getEntriesFromCoreData];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    if (self.notifyEntryID) {
+        [self.view insertSubview:self.loadingView aboveSubview:self.tableView];
+        [self.loadingView setHidden:NO];
+    } else {
+        [self.view insertSubview:self.tableView aboveSubview:self.loadingView];
+        [self.loadingView setHidden:YES];
+    }
+}
+
 #pragma mark - CoreData
 
 - (void)getEntriesFromCoreData {
-    [[DataManager sharedManager] printAllObjects];
     NSArray *entries = [[DataManager sharedManager] allEntriesFromForm:self.form];
+    if (!(entries.count == 0)) {
+        Entry *lastEntry = entries.lastObject;
+        self.lastEntryID = lastEntry.entryID;
+    }
     [self.entriesArray addObjectsFromArray:entries];
     [self.tableView reloadData];
     [self getEntriesFromServer];
@@ -63,7 +78,6 @@
 #pragma mark - API
 
 - (void)getEntriesFromServer {
-    //[[DataManager sharedManager] printAllEntries];
     [[ServiceManager sharedManager] getEntriesWithUserToken:self.token
                                             fromCurrentForm:self.form
                                                 lastEntryID:self.lastEntryID
@@ -72,8 +86,17 @@
                                                       [self.tableView reloadData];
                                                       
                                                       if ([self.entriesArray count] >= 10) {
-                                                          Entry *lastEntry = self.entriesArray[([self.entriesArray count] - 1)];
+                                                          Entry *lastEntry = self.entriesArray.lastObject;
                                                           self.lastEntryID = lastEntry.entryID;
+                                                      }
+                                                      
+                                                      if (self.notifyEntryID) {
+                                                          for (Entry *entry in self.entriesArray) {
+                                                              if (entry.entryID == self.notifyEntryID) {
+                                                                  [self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:entry.index inSection:0]];
+                                                              }
+                                                          }
+                                                          self.notifyEntryID = 0;
                                                       }
                                                   }
                                                   onFailure:^(NSError *error, NSInteger statusCode) {
@@ -82,50 +105,53 @@
 }
 
 - (void)updateEntriesWithCompletion:(void (^)())completion {
-    [[ServiceManager sharedManager] getEntriesWithUserToken:self.token
-                                            fromCurrentForm:self.form
-                                                lastEntryID:0
-                                                  onSuccess:^(NSArray *entries) {
-                                                      if (completion) {
-                                                          completion();
-                                                      }
-                                                      [self.entriesArray removeAllObjects];
-                                                      [self.entriesArray addObjectsFromArray:entries];
-                                                      [self.tableView reloadData];
-                                                      
-                                                      if ([self.entriesArray count] >= 10) {
-                                                          Entry *lastEntry = self.entriesArray[([self.entriesArray count] - 1)];
-                                                          self.lastEntryID = lastEntry.entryID;
-                                                      }
-                                                  }
-                                                  onFailure:^(NSError *error, NSInteger statusCode) {
-                                                      NSLog(@"error = %@, code = %ld", [error localizedDescription], statusCode);
-                                                  }];
+    [[ServiceManager sharedManager] updateEntriesWithUserToken:self.token
+                                               fromCurrentForm:self.form
+                                                   lastEntryID:0
+                                                     onSuccess:^(NSArray *entries) {
+                                                         if (completion) {
+                                                             completion();
+                                                         }
+                                                         [self.entriesArray removeAllObjects];
+                                                         [self.entriesArray addObjectsFromArray:entries];
+                                                         [self.tableView reloadData];
+                                                         
+                                                         if ([self.entriesArray count] >= 10) {
+                                                             Entry *lastEntry = self.entriesArray.lastObject;
+                                                             self.lastEntryID = lastEntry.entryID;
+                                                         }
+                                                     }
+                                                     onFailure:^(NSError *error, NSInteger statusCode) {
+                                                         if (completion) {
+                                                             completion();
+                                                         }
+                                                         NSLog(@"error = %@, code = %ld", [error localizedDescription], statusCode);
+                                                     }];
 }
 
 - (void)removeEntry:(Entry *)entry {
-    [[ServiceManager sharedManager] removeEntryWithUserToken:self.token
-                                           andRemovedEntryID:entry.entryID
-                                                   onSuccess:^(id result) {
-                                                       //
-                                                   }
-                                                   onFailure:^(NSError *error, NSInteger statusCode) {
-                                                       //
-                                                   }];
-}
-
-- (void)logOut {
-    [[ServiceManager sharedManager] logOutWithUserToken:self.token
+    [[ServiceManager sharedManager] removeEntryFromForm:self.form
+                                          WithUserToken:self.token
+                                      andRemovedEntryID:entry.entryID
                                               onSuccess:^(id result) {
                                                   //
                                               }
                                               onFailure:^(NSError *error, NSInteger statusCode) {
                                                   //
                                               }];
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:NO forKey:@"StaySignedIn"];
-    [defaults removeObjectForKey:@"token"];
+}
+
+- (void)logOut {
+    [[ServiceManager sharedManager] logOutWithUserToken:self.token
+                                              onSuccess:^(id result) {
+                                                  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                                  [defaults setBool:NO forKey:@"StaySignedIn"];
+                                                  [defaults removeObjectForKey:@"token"];
+                                                  [self performSegueWithIdentifier:@"LogOutFromEntriesSegue" sender:self];
+                                              }
+                                              onFailure:^(NSError *error, NSInteger statusCode) {
+                                                  [self logOutErrorAlert];
+                                              }];
 }
 
 #pragma mark - UITableViewDataSource
@@ -148,8 +174,8 @@
 // Remove entry from tableview with swipe to delete
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        Entry *removedEntry = [self.entriesArray objectAtIndex:indexPath.row];
-        [self removeEntry:removedEntry];
+        Entry *entryForRemove = [self.entriesArray objectAtIndex:indexPath.row];
+        [self removeEntry:entryForRemove];
         [self.entriesArray removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         [tableView reloadData];
@@ -195,8 +221,6 @@
                                                       style:UIAlertActionStyleDestructive
                                                     handler:^(UIAlertAction * _Nonnull action) {
                                                         [self logOut];
-                                                        //[self.navigationController popToRootViewControllerAnimated:YES];
-                                                        [self performSegueWithIdentifier:@"LogOutFromEntriesSegue" sender:self];
                                                     }];
     UIAlertAction *button3 = [UIAlertAction actionWithTitle:@"Cancle"
                                                       style:UIAlertActionStyleCancel
@@ -262,10 +286,18 @@
            completionHandler:^(BOOL success) {
                NSLog(@"Open %@: %d",scheme,success);
            }];
-    } else {
-        BOOL success = [application openURL:URL];
-        NSLog(@"Open %@: %d",scheme,success);
     }
+}
+
+- (void)logOutErrorAlert {
+    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:@"Boooom"
+                                                                        message:@"Connection problem!\nWe couldn't  log out you."
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK"
+                                                 style:UIAlertActionStyleDefault
+                                               handler:nil];
+    [errorAlert addAction:ok];
+    [self presentViewController:errorAlert animated:YES completion:nil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

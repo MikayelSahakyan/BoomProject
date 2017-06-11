@@ -12,13 +12,17 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+    self.nameLabel.text = @"";
+    self.nameValueLabel.text = @"";
+    self.emailLabel.text = @"";
+    self.emailValueLabel.text = @"";
+    self.commentLabel.text = @"";
+    self.commentValueLabel.text = @"";
+    self.dateLabel.text = @"";
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
 - (void)prepareForReuse {

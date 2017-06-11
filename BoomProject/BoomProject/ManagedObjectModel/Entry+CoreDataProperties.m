@@ -16,7 +16,7 @@
 
 + (NSString *)relativeDateStringForDate:(NSDate *)date {
     
-    NSCalendarUnit units = NSCalendarUnitDay | NSCalendarUnitWeekOfYear | NSCalendarUnitMonth | NSCalendarUnitYear;
+    NSCalendarUnit units = NSCalendarUnitSecond | NSCalendarUnitMinute | NSCalendarUnitHour | NSCalendarUnitDay | NSCalendarUnitWeekOfYear | NSCalendarUnitMonth | NSCalendarUnitYear;
     
     NSDateComponents *components = [[NSCalendar currentCalendar]
                                     components:units
@@ -28,15 +28,19 @@
     } else if (components.month > 0) {
         return [NSString stringWithFormat:@"%ld months ago", (long)components.month];
     } else if (components.weekOfYear > 0) {
-        return [NSString stringWithFormat:@"%ld week ago", (long)components.weekOfYear];
+        return [NSString stringWithFormat:@"%ld weeks ago", (long)components.weekOfYear];
     } else if (components.day > 0) {
         if (components.day > 1) {
-            return [NSString stringWithFormat:@"%ld years ago", (long)components.day];
+            return [NSString stringWithFormat:@"%ld days ago", (long)components.day];
         } else {
             return @"Yesterday";
         }
+    } else if (components.hour > 0) {
+        return [NSString stringWithFormat:@"%ld hours ago", (long)components.hour];
+    } else if (components.minute > 0) {
+        return [NSString stringWithFormat:@"%ld minutes ago", (long)components.minute];
     } else {
-        return @"Today";
+        return [NSString stringWithFormat:@"%ld seconds ago", (long)components.second];
     }
 }
 

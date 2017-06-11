@@ -10,6 +10,7 @@
 
 @interface FormViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
-@property (strong, nonatomic) NSMutableArray *formsArray;
+@property (strong, nonatomic) NSString *notifyFormID;
+@property (assign, nonatomic) double notifyEntryID;
 
 @end
