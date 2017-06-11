@@ -42,7 +42,6 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
     parameters:params
       progress:nil
        success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-           NSLog(@"JSON:%@", responseObject);
            NSManagedObjectContext *context = [[[DataManager sharedManager] persistentContainer] viewContext];
            [[DataManager sharedManager] deleteAllForms];
            NSArray *dictsArray = responseObject;
@@ -62,7 +61,6 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
            NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
            NSInteger statusCode = [response statusCode];
-           NSLog(@"Error:%@", error);
            if (failure) {
                failure(error, statusCode);
            }
@@ -82,7 +80,6 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
    parameters:params
      progress:nil
       success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-          NSLog(@"JSON:%@", responseObject);
           NSManagedObjectContext *context = [[[DataManager sharedManager] persistentContainer] viewContext];
           
           NSArray *arrayOfArrays = responseObject;
@@ -119,7 +116,6 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
       } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
           NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
           NSInteger statusCode = [response statusCode];
-          NSLog(@"Error:%@", error);
           if (failure) {
               failure(error, statusCode);
           }
@@ -139,7 +135,6 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
    parameters:params
      progress:nil
       success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-          NSLog(@"JSON:%@", responseObject);
           NSManagedObjectContext *context = [[[DataManager sharedManager] persistentContainer] viewContext];
           [[DataManager sharedManager] deleteAllEntriesFromForm:form];
           
@@ -177,7 +172,6 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
       } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
           NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
           NSInteger statusCode = [response statusCode];
-          NSLog(@"Error:%@", error);
           if (failure) {
               failure(error, statusCode);
           }
@@ -197,7 +191,6 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
     parameters:params
       progress:nil
        success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-           NSLog(@"JSON:%@", responseObject);
            [[DataManager sharedManager] removeEntryFromForm:form withID:entryID];
            if (success) {
                success(responseObject);
@@ -206,7 +199,6 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
        failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
            NSHTTPURLResponse *respone = (NSHTTPURLResponse *)task.response;
            NSInteger statusCode = [respone statusCode];
-           NSLog(@"Error:%@", error);
            if (failure) {
                failure(error, statusCode);
            }
@@ -224,7 +216,6 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
     parameters:params
       progress:nil
        success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-           NSLog(@"JSON:%@", responseObject);
            if (success) {
                success(responseObject);
            }
@@ -232,7 +223,6 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
        failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
            NSHTTPURLResponse *respone = (NSHTTPURLResponse *)task.response;
            NSInteger statusCode = [respone statusCode];
-           NSLog(@"Error:%@", error);
            if (failure) {
                failure(error, statusCode);
            }
@@ -255,7 +245,6 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
     parameters:params
       progress:nil
        success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-           NSLog(@"JSON:%@", responseObject);
            if (success) {
                success(responseObject);
            }
@@ -263,7 +252,6 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
        failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
            NSHTTPURLResponse *respone = (NSHTTPURLResponse *)task.response;
            NSInteger statusCode = [respone statusCode];
-           NSLog(@"Error:%@", error);
            if (failure) {
                failure(error, statusCode);
            }

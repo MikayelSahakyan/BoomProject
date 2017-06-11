@@ -22,8 +22,6 @@
 - (NSArray *)allObjects;
 - (NSArray *)allForms;
 - (NSArray *)allEntriesFromForm:(Form *)form;
-- (void)printAllForms;
-- (void)printAllObjects;
 - (void)deleteAllForms;
 - (void)deleteAllEntriesFromForm:(Form *)form;
 - (void)removeEntryFromForm:(Form *)form withID:(double)entryID;

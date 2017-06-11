@@ -100,7 +100,6 @@
                                                       }
                                                   }
                                                   onFailure:^(NSError *error, NSInteger statusCode) {
-                                                      NSLog(@"error = %@, code = %ld", [error localizedDescription], (long)statusCode);
                                                   }];
 }
 
@@ -125,7 +124,6 @@
                                                          if (completion) {
                                                              completion();
                                                          }
-                                                         NSLog(@"error = %@, code = %ld", [error localizedDescription], (long)statusCode);
                                                      }];
 }
 
@@ -284,7 +282,6 @@
     if ([application respondsToSelector:@selector(openURL:options:completionHandler:)]) {
         [application openURL:URL options:@{}
            completionHandler:^(BOOL success) {
-               NSLog(@"Open %@: %d",scheme,success);
            }];
     }
 }

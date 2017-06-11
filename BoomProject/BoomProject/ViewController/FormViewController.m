@@ -56,7 +56,6 @@
 #pragma mark - CoreData
 
 - (void)getFormsFromCoreData {
-    [[DataManager sharedManager] printAllForms];
     NSArray *forms = [[DataManager sharedManager] allForms];
     [self.formsArray removeAllObjects];
     [self.formsArray addObjectsFromArray:forms];
@@ -90,7 +89,6 @@
                                                  if (completion) {
                                                      completion();
                                                  }
-                                                 NSLog(@"error = %@, code = %ld", [error localizedDescription], (long)statusCode);
                                              }];
 }
 
@@ -173,7 +171,6 @@
     if ([application respondsToSelector:@selector(openURL:options:completionHandler:)]) {
         [application openURL:URL options:@{}
            completionHandler:^(BOOL success) {
-               NSLog(@"Open %@: %d",scheme,success);
            }];
     }
 }

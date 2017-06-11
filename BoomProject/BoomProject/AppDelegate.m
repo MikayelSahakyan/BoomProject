@@ -33,14 +33,12 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
         UINavigationController *navigationController = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"navigation"];
         [navigationController pushViewController:formVC animated:NO];
         self.window.rootViewController = navigationController;
-        NSLog(@"not first launch");
     } else {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UIViewController *loginVC = [storyboard instantiateViewControllerWithIdentifier:@"login"];
         UINavigationController *navigationController = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"navigation"];
         [navigationController pushViewController:loginVC animated:NO];
         self.window.rootViewController = navigationController;
-        NSLog(@"first launch");
     }
     return YES;
 }

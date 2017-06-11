@@ -39,9 +39,6 @@
     NSFetchRequest *request = [ServiceObject fetchRequest];
     NSError *requestError = nil;
     NSArray *resultArray = [context executeFetchRequest:request error:&requestError];
-    if (requestError) {
-        NSLog(@"%@", [requestError localizedDescription]);
-    }
     return resultArray;
 }
 
@@ -52,9 +49,6 @@
     NSSortDescriptor *indexDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
     [request setSortDescriptors:@[indexDescriptor]];
     NSArray *resultArray = [context executeFetchRequest:request error:&requestError];
-    if (requestError) {
-        NSLog(@"%@", [requestError localizedDescription]);
-    }
     return resultArray;
 }
 
@@ -67,36 +61,7 @@
     [request setPredicate:predicate];
     NSError *requestError = nil;
     NSArray *resultArray = [context executeFetchRequest:request error:&requestError];
-    if (requestError) {
-        NSLog(@"%@", [requestError localizedDescription]);
-    }
     return resultArray;
-}
-
-- (void)printArray:(NSArray *)array {
-    for (id object in array) {
-        if ([object isKindOfClass:[Entry class]]) {
-            Entry *entry = (Entry *)object;
-            NSLog(@"Entry: %f, %@, FORM: %@, ROWS: %ld", entry.entryID, entry.date, entry.form.name, (unsigned long)[entry.rows count]);
-        } else if ([object isKindOfClass:[Form class]]) {
-            Form *form = (Form *)object;
-            NSLog(@"FORM: %@ - %@, ENTRIES: %ld", form.formID, form.name, (unsigned long)[form.entries count]);
-        } else if ([object isKindOfClass:[Row class]]) {
-            Row *row = (Row *)object;
-            NSLog(@"ROW: %f, %@ %@", row.entry.entryID, row.entry.date, row.entry.form.name);
-        }
-    }
-    NSLog(@"COUNT = %ld", (unsigned long)[array count]);
-}
-
-- (void)printAllForms {
-    NSArray *allForms = [self allForms];
-    [self printArray:allForms];
-}
-
-- (void)printAllObjects {
-    NSArray *allEntries = [self allObjects];
-    [self printArray:allEntries];
 }
 
 - (void)deleteAllForms {

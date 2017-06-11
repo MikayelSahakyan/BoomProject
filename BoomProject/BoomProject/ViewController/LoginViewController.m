@@ -123,7 +123,6 @@
                                              }
                                              onFailure:^(NSError *error, NSInteger statusCode) {
                                                  [self connectionErrorAlert];
-                                                 NSLog(@"error = %@, code = %ld", [error localizedDescription], (long)statusCode);
                                              }];
 }
 
