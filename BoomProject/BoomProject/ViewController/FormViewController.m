@@ -80,7 +80,7 @@
                                                  if (self.notifyFormID) {
                                                      for (Form *form in self.formsArray) {
                                                          if ([form.formID isEqualToString:self.notifyFormID]) {
-                                                             [self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:form.index inSection:0]];
+                                                             [self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:(NSInteger)form.index inSection:0]];
                                                          }
                                                      }
                                                      self.notifyFormID = nil;
@@ -90,7 +90,7 @@
                                                  if (completion) {
                                                      completion();
                                                  }
-                                                 NSLog(@"error = %@, code = %ld", [error localizedDescription], statusCode);
+                                                 NSLog(@"error = %@, code = %ld", [error localizedDescription], (long)statusCode);
                                              }];
 }
 

@@ -77,16 +77,16 @@
     for (id object in array) {
         if ([object isKindOfClass:[Entry class]]) {
             Entry *entry = (Entry *)object;
-            NSLog(@"Entry: %f, %@, FORM: %@, ROWS: %lu", entry.entryID, entry.date, entry.form.name, [entry.rows count]);
+            NSLog(@"Entry: %f, %@, FORM: %@, ROWS: %ld", entry.entryID, entry.date, entry.form.name, (unsigned long)[entry.rows count]);
         } else if ([object isKindOfClass:[Form class]]) {
             Form *form = (Form *)object;
-            NSLog(@"FORM: %@ - %@, ENTRIES: %ld", form.formID, form.name, [form.entries count]);
+            NSLog(@"FORM: %@ - %@, ENTRIES: %ld", form.formID, form.name, (unsigned long)[form.entries count]);
         } else if ([object isKindOfClass:[Row class]]) {
             Row *row = (Row *)object;
             NSLog(@"ROW: %f, %@ %@", row.entry.entryID, row.entry.date, row.entry.form.name);
         }
     }
-    NSLog(@"COUNT = %ld", [array count]);
+    NSLog(@"COUNT = %ld", (unsigned long)[array count]);
 }
 
 - (void)printAllForms {

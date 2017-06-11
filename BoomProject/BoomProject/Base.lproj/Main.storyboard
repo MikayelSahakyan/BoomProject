@@ -288,7 +288,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="tFL-Te-JJd"/>
                                 </constraints>
-                                <string key="text">With this amazing Boom Form application You can easily view all your submits anywhere You want and will never miss the fresh ones because of our very fast sound notifications.</string>
+                                <string key="text">With this amazing Boom Form application you can easily view all your submissions anywhere. You will never miss new entries with push notifications on your iPhone.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>

@@ -93,14 +93,14 @@
                                                       if (self.notifyEntryID) {
                                                           for (Entry *entry in self.entriesArray) {
                                                               if (entry.entryID == self.notifyEntryID) {
-                                                                  [self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:entry.index inSection:0]];
+                                                                  [self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:(NSInteger)entry.index inSection:0]];
                                                               }
                                                           }
                                                           self.notifyEntryID = 0;
                                                       }
                                                   }
                                                   onFailure:^(NSError *error, NSInteger statusCode) {
-                                                      NSLog(@"error = %@, code = %ld", [error localizedDescription], statusCode);
+                                                      NSLog(@"error = %@, code = %ld", [error localizedDescription], (long)statusCode);
                                                   }];
 }
 
@@ -125,7 +125,7 @@
                                                          if (completion) {
                                                              completion();
                                                          }
-                                                         NSLog(@"error = %@, code = %ld", [error localizedDescription], statusCode);
+                                                         NSLog(@"error = %@, code = %ld", [error localizedDescription], (long)statusCode);
                                                      }];
 }
 

@@ -134,7 +134,7 @@
 
 - (void)changedRow:(Row *)row {
     self.selectedRow = row;
-    [self.rowsArray replaceObjectAtIndex:(self.selectedRow.index - 1) withObject:self.selectedRow];
+    [self.rowsArray replaceObjectAtIndex:((NSUInteger)self.selectedRow.index - 1) withObject:self.selectedRow];
     [self.tableView reloadData];
     [self sendChangedEntryToServer];
 }
