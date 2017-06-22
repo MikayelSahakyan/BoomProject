@@ -9,7 +9,6 @@
 #import "ServiceManager.h"
 #import "ServiceObject+CoreDataClass.h"
 #import "DataManager.h"
-#import <Firebase/Firebase.h>
 
 static NSString *const kHostSettingsURL = @"http://api.boomform.com/form/settings";
 static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
@@ -33,8 +32,9 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
                  onSuccess:(void (^)(NSArray *forms))success
                  onFailure:(void (^)(NSError *, NSInteger))failure {
     
+    NSString *fireToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"firebaseToken"];
     NSDictionary *params = @{@"user_token"     : userToken,
-                             @"firebase_token" : [[FIRInstanceID instanceID] token],
+                             @"firebase_token" : fireToken,
                              @"notification"   : @"1",
                              @"sound"          : @"1"};
     
@@ -184,8 +184,9 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
                   onSuccess:(void (^)(id result))success
                   onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
     
+    NSString *fireToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"firebaseToken"];
     NSDictionary *params = @{@"user_token"     : userToken,
-                             @"firebase_token" : [[FIRInstanceID instanceID] token],
+                             @"firebase_token" : fireToken,
                              @"entry_remove"   : @(entryID)};
     [self POST:kHostSettingsURL
     parameters:params
@@ -209,8 +210,9 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
                   onSuccess:(void (^)(id result))success
                   onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
     
+    NSString *fireToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"firebaseToken"];
     NSDictionary *params = @{@"user_token"     : userToken,
-                             @"firebase_token" : [[FIRInstanceID instanceID] token],
+                             @"firebase_token" : fireToken,
                              @"status"         : @"logged_out"};
     [self POST:kHostSettingsURL
     parameters:params
@@ -236,8 +238,9 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
                        onSuccess:(void (^)(id result))success
                        onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
     
+    NSString *fireToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"firebaseToken"];
     NSDictionary *params = @{@"user_token"      : userToken,
-                             @"firebase_token"  : [[FIRInstanceID instanceID] token],
+                             @"firebase_token"  : fireToken,
                              @"entry_id"        : @(entryID),
                              @"row_id"          : rowID,
                              @"edit"            : text};

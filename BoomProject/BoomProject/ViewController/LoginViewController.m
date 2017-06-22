@@ -10,6 +10,7 @@
 #import "FormViewController.h"
 #import "EntriesViewController.h"
 #import "ServiceManager.h"
+#import <Firebase/Firebase.h>
 
 @interface LoginViewController ()
 
@@ -90,10 +91,14 @@
 #pragma mark - IBActions
 
 - (IBAction)loginButtonPressed {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:self.tokenTextField.text forKey:@"token"];
-    [self.tokenTextField resignFirstResponder];
-    [self getFormsFromServer];
+    if (![[FIRInstanceID instanceID] token]) {
+        [self connectionErrorAlert];
+    } else {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:self.tokenTextField.text forKey:@"token"];
+        [self.tokenTextField resignFirstResponder];
+        [self getFormsFromServer];
+    }
 }
 
 - (IBAction)prepareToReturn:(UIStoryboardSegue *)segue {

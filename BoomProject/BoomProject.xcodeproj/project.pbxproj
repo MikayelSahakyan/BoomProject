@@ -504,7 +504,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomform.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "30caae38-ec46-45ff-a597-bd15622a47e2";
+				PROVISIONING_PROFILE = "2b84fc4a-6727-4f05-8c70-680531635573";
 				PROVISIONING_PROFILE_SPECIFIER = "Boom Dev";
 			};
 			name = Debug;

@@ -139,6 +139,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     [self connectToFcm];
     
     // TODO: If necessary send token to application server.
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:refreshedToken forKey:@"firebaseToken"];
 }
 
 - (void)connectToFcm {
