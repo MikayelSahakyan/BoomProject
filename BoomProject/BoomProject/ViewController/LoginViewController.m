@@ -118,17 +118,17 @@
 // Check token and availability of internet
 - (void)getFormsFromServer {
     NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"token"];
-    [[ServiceManager sharedManager] loginWithUserToken:token
-                                             onSuccess:^(NSArray *forms) {
-                                                 if (!(forms.count == 0)) {
-                                                     [self performSegueWithIdentifier:@"Login" sender:nil];
-                                                 } else {
-                                                     [self tokenErrorAlert];
-                                                 }
+    [[ServiceManager sharedManager] checkUserToken:token
+                                         onSuccess:^(id result) {
+                                             if (![result isKindOfClass:[NSArray class]]) {
+                                                 [self tokenErrorAlert];
+                                             } else {
+                                                 [self performSegueWithIdentifier:@"Login" sender:nil];
                                              }
-                                             onFailure:^(NSError *error, NSInteger statusCode) {
-                                                 [self connectionErrorAlert];
-                                             }];
+                                         }
+                                         onFailure:^(NSError *error, NSInteger statusCode) {
+                                             [self connectionErrorAlert];
+                                         }];
 }
 
 // Error alerts

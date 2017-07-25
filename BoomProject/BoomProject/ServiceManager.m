@@ -10,8 +10,11 @@
 #import "ServiceObject+CoreDataClass.h"
 #import "DataManager.h"
 
-static NSString *const kHostSettingsURL = @"http://api.boomform.com/form/settings";
-static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
+static NSString *const kHostLoginURL = @"https://api.boomform.com/login/";
+static NSString *const kHostGetSubmissionsURL = @"https://api.boomform.com/get_submissions/";
+static NSString *const kHostUpdateEntryURL = @"https://api.boomform.com/update_entry/";
+static NSString *const kHostRemoveEntryURL = @"https://api.boomform.com/remove_entry/";
+static NSString *const kHostLogOutURL = @"https://api.boomform.com/logout/";
 
 @implementation ServiceManager
 
@@ -28,6 +31,33 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
     return sharedObject;
 }
 
+- (void)checkUserToken:(NSString *)userToken
+             onSuccess:(void (^)(id result))success
+             onFailure:(void (^)(NSError *, NSInteger))failure {
+    
+    NSString *fireToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"firebaseToken"];
+    NSDictionary *params = @{@"user_token"     : userToken,
+                             @"firebase_token" : fireToken,
+                             @"notification"   : @"1",
+                             @"sound"          : @"1"};
+    
+    [self POST:kHostLoginURL
+    parameters:params
+      progress:nil
+       success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+           if (success) {
+               success(responseObject);
+           }
+           
+       } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+           NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
+           NSInteger statusCode = [response statusCode];
+           if (failure) {
+               failure(error, statusCode);
+           }
+       }];
+}
+
 - (void)loginWithUserToken:(NSString *)userToken
                  onSuccess:(void (^)(NSArray *forms))success
                  onFailure:(void (^)(NSError *, NSInteger))failure {
@@ -38,7 +68,7 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
                              @"notification"   : @"1",
                              @"sound"          : @"1"};
     
-    [self POST:kHostSettingsURL
+    [self POST:kHostLoginURL
     parameters:params
       progress:nil
        success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -49,8 +79,8 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
            
            for (NSDictionary *dictionary in dictsArray) {
                Form *form = [NSEntityDescription insertNewObjectForEntityForName:@"Form" inManagedObjectContext:context];
-               form.formID = [dictionary objectForKey:@"id"];
-               form.name = [dictionary objectForKey:@"name"];
+               form.formID = [dictionary objectForKey:@"formId"];
+               form.name = [dictionary objectForKey:@"formName"];
                form.index = [dictsArray indexOfObject:dictionary];
                [objectsArray addObject:form];
            }
@@ -76,50 +106,51 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
     NSDictionary *params = @{@"user_token" : userToken,
                              @"form_id"    : form.formID,
                              @"entry_id"   : @(entryID)};
-    [self GET:kHostEntryURL
-   parameters:params
-     progress:nil
-      success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-          NSManagedObjectContext *context = [[[DataManager sharedManager] persistentContainer] viewContext];
-          
-          NSArray *arrayOfArrays = responseObject;
-          NSMutableArray *entriesArray = [NSMutableArray array];
-          
-          for (NSArray *rowDictsArray in arrayOfArrays) {
-              if ([rowDictsArray count] > 1) {
-                  // Parsing entry info at 0 index
-                  Entry *entry = [NSEntityDescription insertNewObjectForEntityForName:@"Entry" inManagedObjectContext:context];
-                  NSDictionary *entryInfo = rowDictsArray[0];
-                  entry.date = entryInfo[@"date"];
-                  entry.entryID = [entryInfo[@"id"] doubleValue];
-                  entry.index = [arrayOfArrays indexOfObject:rowDictsArray];
-                  
-                  // Parsing rows
-                  for (NSInteger i = 1; i < [rowDictsArray count]; i++) {
-                      NSDictionary *rowDict = rowDictsArray[i];
-                      
-                      Row *row = [NSEntityDescription insertNewObjectForEntityForName:@"Row" inManagedObjectContext:context];
-                      row.key = [rowDict objectForKey:@"key"];
-                      row.value = [rowDict objectForKey:@"value"];
-                      row.rowID = [rowDict objectForKey:@"row_id"];
-                      row.entry = entry;
-                      row.index = i;
-                  }
-                  entry.form = form;
-                  [entriesArray addObject:entry];
-              }
-          }
-          [[DataManager sharedManager] saveContext];
-          if (success) {
-              success(entriesArray);
-          }
-      } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-          NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
-          NSInteger statusCode = [response statusCode];
-          if (failure) {
-              failure(error, statusCode);
-          }
-      }];
+    
+    [self POST:kHostGetSubmissionsURL
+    parameters:params
+      progress:nil
+       success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+           NSManagedObjectContext *context = [[[DataManager sharedManager] persistentContainer] viewContext];
+           
+           NSArray *arrayOfArrays = responseObject;
+           NSMutableArray *entriesArray = [NSMutableArray array];
+           
+           for (NSArray *rowDictsArray in arrayOfArrays) {
+               if ([rowDictsArray count] > 1) {
+                   // Parsing entry info at 0 index
+                   Entry *entry = [NSEntityDescription insertNewObjectForEntityForName:@"Entry" inManagedObjectContext:context];
+                   NSDictionary *entryInfo = rowDictsArray[0];
+                   entry.date = entryInfo[@"date"];
+                   entry.entryID = [entryInfo[@"id"] doubleValue];
+                   entry.index = [arrayOfArrays indexOfObject:rowDictsArray];
+                   
+                   // Parsing rows
+                   for (NSInteger i = 1; i < [rowDictsArray count]; i++) {
+                       NSDictionary *rowDict = rowDictsArray[i];
+                       
+                       Row *row = [NSEntityDescription insertNewObjectForEntityForName:@"Row" inManagedObjectContext:context];
+                       row.key = [rowDict objectForKey:@"key"];
+                       row.value = [rowDict objectForKey:@"value"];
+                       row.rowID = [rowDict objectForKey:@"row_id"];
+                       row.entry = entry;
+                       row.index = i;
+                   }
+                   entry.form = form;
+                   [entriesArray addObject:entry];
+               }
+           }
+           [[DataManager sharedManager] saveContext];
+           if (success) {
+               success(entriesArray);
+           }
+       } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+           NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
+           NSInteger statusCode = [response statusCode];
+           if (failure) {
+               failure(error, statusCode);
+           }
+       }];
 }
 
 - (void)updateEntriesWithUserToken:(NSString *)userToken
@@ -131,51 +162,51 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
     NSDictionary *params = @{@"user_token" : userToken,
                              @"form_id"    : form.formID,
                              @"entry_id"   : @(entryID)};
-    [self GET:kHostEntryURL
-   parameters:params
-     progress:nil
-      success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-          NSManagedObjectContext *context = [[[DataManager sharedManager] persistentContainer] viewContext];
-          [[DataManager sharedManager] deleteAllEntriesFromForm:form];
-          
-          NSArray *arrayOfArrays = responseObject;
-          NSMutableArray *entriesArray = [NSMutableArray array];
-          
-          for (NSArray *rowDictsArray in arrayOfArrays) {
-              if ([rowDictsArray count] > 1) {
-                  // Parsing entry info at 0 index
-                  Entry *entry = [NSEntityDescription insertNewObjectForEntityForName:@"Entry" inManagedObjectContext:context];
-                  NSDictionary *entryInfo = rowDictsArray[0];
-                  entry.date = entryInfo[@"date"];
-                  entry.entryID = [entryInfo[@"id"] doubleValue];
-                  entry.index = [arrayOfArrays indexOfObject:rowDictsArray];
-                  
-                  // Parsing rows
-                  for (NSInteger i = 1; i < [rowDictsArray count]; i++) {
-                      NSDictionary *rowDict = rowDictsArray[i];
-                      
-                      Row *row = [NSEntityDescription insertNewObjectForEntityForName:@"Row" inManagedObjectContext:context];
-                      row.key = [rowDict objectForKey:@"key"];
-                      row.value = [rowDict objectForKey:@"value"];
-                      row.rowID = [rowDict objectForKey:@"row_id"];
-                      row.entry = entry;
-                      row.index = i;
-                  }
-                  entry.form = form;
-                  [entriesArray addObject:entry];
-              }
-          }
-          [[DataManager sharedManager] saveContext];
-          if (success) {
-              success(entriesArray);
-          }
-      } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-          NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
-          NSInteger statusCode = [response statusCode];
-          if (failure) {
-              failure(error, statusCode);
-          }
-      }];
+    [self POST:kHostGetSubmissionsURL
+    parameters:params
+      progress:nil
+       success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+           NSManagedObjectContext *context = [[[DataManager sharedManager] persistentContainer] viewContext];
+           [[DataManager sharedManager] deleteAllEntriesFromForm:form];
+           
+           NSArray *arrayOfArrays = responseObject;
+           NSMutableArray *entriesArray = [NSMutableArray array];
+           
+           for (NSArray *rowDictsArray in arrayOfArrays) {
+               if ([rowDictsArray count] > 1) {
+                   // Parsing entry info at 0 index
+                   Entry *entry = [NSEntityDescription insertNewObjectForEntityForName:@"Entry" inManagedObjectContext:context];
+                   NSDictionary *entryInfo = rowDictsArray[0];
+                   entry.date = entryInfo[@"date"];
+                   entry.entryID = [entryInfo[@"id"] doubleValue];
+                   entry.index = [arrayOfArrays indexOfObject:rowDictsArray];
+                   
+                   // Parsing rows
+                   for (NSInteger i = 1; i < [rowDictsArray count]; i++) {
+                       NSDictionary *rowDict = rowDictsArray[i];
+                       
+                       Row *row = [NSEntityDescription insertNewObjectForEntityForName:@"Row" inManagedObjectContext:context];
+                       row.key = [rowDict objectForKey:@"key"];
+                       row.value = [rowDict objectForKey:@"value"];
+                       row.rowID = [rowDict objectForKey:@"row_id"];
+                       row.entry = entry;
+                       row.index = i;
+                   }
+                   entry.form = form;
+                   [entriesArray addObject:entry];
+               }
+           }
+           [[DataManager sharedManager] saveContext];
+           if (success) {
+               success(entriesArray);
+           }
+       } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+           NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
+           NSInteger statusCode = [response statusCode];
+           if (failure) {
+               failure(error, statusCode);
+           }
+       }];
 }
 
 - (void)removeEntryFromForm:(Form *)form
@@ -184,11 +215,9 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
                   onSuccess:(void (^)(id result))success
                   onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
     
-    NSString *fireToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"firebaseToken"];
-    NSDictionary *params = @{@"user_token"     : userToken,
-                             @"firebase_token" : fireToken,
-                             @"entry_remove"   : @(entryID)};
-    [self POST:kHostSettingsURL
+    NSDictionary *params = @{@"user_token" : userToken,
+                             @"entry_id"   : @(entryID)};
+    [self POST:kHostRemoveEntryURL
     parameters:params
       progress:nil
        success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -212,9 +241,9 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
     
     NSString *fireToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"firebaseToken"];
     NSDictionary *params = @{@"user_token"     : userToken,
-                             @"firebase_token" : fireToken,
-                             @"status"         : @"logged_out"};
-    [self POST:kHostSettingsURL
+                             @"firebase_token" : fireToken};
+    
+    [self POST:kHostLogOutURL
     parameters:params
       progress:nil
        success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -238,13 +267,11 @@ static NSString *const kHostEntryURL = @"http://api.boomform.com/form/entries/";
                        onSuccess:(void (^)(id result))success
                        onFailure:(void(^)(NSError *error, NSInteger statusCode))failure {
     
-    NSString *fireToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"firebaseToken"];
     NSDictionary *params = @{@"user_token"      : userToken,
-                             @"firebase_token"  : fireToken,
                              @"entry_id"        : @(entryID),
                              @"row_id"          : rowID,
                              @"edit"            : text};
-    [self POST:kHostSettingsURL
+    [self POST:kHostUpdateEntryURL
     parameters:params
       progress:nil
        success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
