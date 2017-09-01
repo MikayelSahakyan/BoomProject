@@ -287,14 +287,14 @@
 }
 
 - (void)logOutErrorAlert {
-    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:@"Boooom"
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Boooom"
                                                                         message:@"Connection problem!\nWe couldn't  log out you."
                                                                  preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK"
                                                  style:UIAlertActionStyleDefault
                                                handler:nil];
-    [errorAlert addAction:ok];
-    [self presentViewController:errorAlert animated:YES completion:nil];
+    [alertController addAction:ok];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

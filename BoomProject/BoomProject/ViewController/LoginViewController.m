@@ -97,7 +97,7 @@
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults setObject:self.tokenTextField.text forKey:@"token"];
         [self.tokenTextField resignFirstResponder];
-        [self getFormsFromServer];
+        [self checkToken];
     }
 }
 
@@ -116,7 +116,7 @@
 }
 
 // Check token and availability of internet
-- (void)getFormsFromServer {
+- (void)checkToken {
     NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"token"];
     [[ServiceManager sharedManager] checkUserToken:token
                                          onSuccess:^(id result) {
@@ -133,25 +133,25 @@
 
 // Error alerts
 - (void)tokenErrorAlert {
-    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:@"Boooom"
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Boooom"
                                                                         message:@"Invalid token!"
                                                                  preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK"
                                                  style:UIAlertActionStyleDefault
                                                handler:nil];
-    [errorAlert addAction:ok];
-    [self presentViewController:errorAlert animated:YES completion:nil];
+    [alertController addAction:ok];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)connectionErrorAlert {
-    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:@"Boooom"
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Boooom"
                                                                         message:@"Connection problem!"
                                                                  preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK"
                                                  style:UIAlertActionStyleDefault
                                                handler:nil];
-    [errorAlert addAction:ok];
-    [self presentViewController:errorAlert animated:YES completion:nil];
+    [alertController addAction:ok];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 @end

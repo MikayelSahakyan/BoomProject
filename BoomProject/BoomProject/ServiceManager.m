@@ -11,6 +11,7 @@
 #import "DataManager.h"
 
 static NSString *const kHostLoginURL = @"https://api.boomform.com/login/";
+static NSString *const kHostGetFormsURL = @"https://api.boomform.com/get_forms/";
 static NSString *const kHostGetSubmissionsURL = @"https://api.boomform.com/get_submissions/";
 static NSString *const kHostUpdateEntryURL = @"https://api.boomform.com/update_entry/";
 static NSString *const kHostRemoveEntryURL = @"https://api.boomform.com/remove_entry/";
@@ -58,20 +59,21 @@ static NSString *const kHostLogOutURL = @"https://api.boomform.com/logout/";
        }];
 }
 
-- (void)loginWithUserToken:(NSString *)userToken
-                 onSuccess:(void (^)(NSArray *forms))success
-                 onFailure:(void (^)(NSError *, NSInteger))failure {
+- (void)getFormsWithUserToken:(NSString *)userToken
+                    onSuccess:(void (^)(id result))success
+                    onFailure:(void (^)(NSError *, NSInteger))failure {
     
-    NSString *fireToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"firebaseToken"];
-    NSDictionary *params = @{@"user_token"     : userToken,
-                             @"firebase_token" : fireToken,
-                             @"notification"   : @"1",
-                             @"sound"          : @"1"};
+    NSDictionary *params = @{@"user_token" : userToken};
     
-    [self POST:kHostLoginURL
+    [self POST:kHostGetFormsURL
     parameters:params
       progress:nil
        success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+           if ([responseObject isKindOfClass:[NSDictionary class]]) {
+               if (success) {
+                   success(responseObject);
+               }
+           } else {
            NSManagedObjectContext *context = [[[DataManager sharedManager] persistentContainer] viewContext];
            [[DataManager sharedManager] deleteAllForms];
            NSArray *dictsArray = responseObject;
@@ -87,6 +89,7 @@ static NSString *const kHostLogOutURL = @"https://api.boomform.com/logout/";
            if (success) {
                [[DataManager sharedManager] saveContext];
                success(objectsArray);
+           }
            }
        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
            NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;

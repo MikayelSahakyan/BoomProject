@@ -18,9 +18,9 @@
              onSuccess:(void (^)(id result))success
              onFailure:(void (^)(NSError *, NSInteger))failure;
 
-- (void)loginWithUserToken:(NSString *)userToken
-                 onSuccess:(void (^)(NSArray *forms))success
-                 onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
+- (void)getFormsWithUserToken:(NSString *)userToken
+                    onSuccess:(void (^)(id result))success
+                    onFailure:(void(^)(NSError *error, NSInteger statusCode))failure;
 
 - (void)getEntriesWithUserToken:(NSString *)userToken
                 fromCurrentForm:(Form *)form

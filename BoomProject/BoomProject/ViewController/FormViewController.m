@@ -67,29 +67,59 @@
 
 - (void)loadFormsWithCompletion:(void (^)())completion {
     NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"token"];
-    [[ServiceManager sharedManager] loginWithUserToken:token
-                                             onSuccess:^(NSArray *forms) {
-                                                 if (completion) {
-                                                     completion();
-                                                 }
-                                                 [self.formsArray removeAllObjects];
-                                                 [self.formsArray addObjectsFromArray:forms];
-                                                 [self.tableView reloadData];
-                                                 
-                                                 if (self.notifyFormID) {
-                                                     for (Form *form in self.formsArray) {
-                                                         if ([form.formID isEqualToString:self.notifyFormID]) {
-                                                             [self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:(NSInteger)form.index inSection:0]];
+    [[ServiceManager sharedManager] getFormsWithUserToken:token
+                                                onSuccess:^(id result) {
+                                                    if ([result isKindOfClass:[NSArray class]]) {
+                                                        if (completion) {
+                                                            completion();
+                                                        }
+                                                        [self.formsArray removeAllObjects];
+                                                        [self.formsArray addObjectsFromArray:result];
+                                                        [self.tableView reloadData];
+                                                        
+                                                        if (self.notifyFormID) {
+                                                            for (Form *form in self.formsArray) {
+                                                                if ([form.formID isEqualToString:self.notifyFormID]) {
+                                                                    [self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:(NSInteger)form.index inSection:0]];
+                                                                }
+                                                            }
+                                                            self.notifyFormID = nil;
+                                                        }
+                                                    } else {
+                                                        [self changedTokenErrorAlert];
+                                                    }
+                                                }
+                                                onFailure:^(NSError *error, NSInteger statusCode) {
+                                                    if (completion) {
+                                                        completion();
+                                                    }
+                                                }];
+}
+
+// Check token and availability of internet
+- (void)checkToken {
+    NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"token"];
+    [[ServiceManager sharedManager] checkUserToken:token
+                                         onSuccess:^(id result) {
+                                             if (![result isKindOfClass:[NSArray class]]) {
+                                                 [self tokenErrorAlert];
+                                             } else {
+                                                 [self loadFormsWithCompletion:^{
+                                                     [UIView transitionWithView:self.view duration:2.0 options:UIViewAnimationOptionTransitionFlipFromBottom animations:^{
+                                                         [self.view insertSubview:self.loadingView aboveSubview:self.tableView];
+                                                         [self.loadingView setHidden:NO];
+                                                     } completion:^(BOOL finished) {
+                                                         if (finished) {
+                                                             [self.view insertSubview:self.tableView aboveSubview:self.loadingView];
+                                                             [self.loadingView setHidden:YES];
                                                          }
-                                                     }
-                                                     self.notifyFormID = nil;
-                                                 }
+                                                     }];
+                                                 }];
                                              }
-                                             onFailure:^(NSError *error, NSInteger statusCode) {
-                                                 if (completion) {
-                                                     completion();
-                                                 }
-                                             }];
+                                         }
+                                         onFailure:^(NSError *error, NSInteger statusCode) {
+                                             [self connectionErrorAlert];
+                                         }];
 }
 
 - (void)logOut {
@@ -175,15 +205,74 @@
     }
 }
 
+// Error alerts
 - (void)logOutErrorAlert {
-    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:@"Boooom"
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Boooom"
                                                                         message:@"Connection problem!\nWe couldn't  log out you."
                                                                  preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK"
                                                  style:UIAlertActionStyleDefault
                                                handler:nil];
-    [errorAlert addAction:ok];
-    [self presentViewController:errorAlert animated:YES completion:nil];
+    [alertController addAction:ok];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)changedTokenErrorAlert {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token has been changed!"
+                                                                        message:@"Log in again with new token"
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"token";
+        textField.textColor = [UIColor colorWithRed:0.114 green:0.459 blue:0.812 alpha:1.0];
+        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    }];
+    UIAlertAction *logIn = [UIAlertAction actionWithTitle:@"Log In"
+                                                 style:UIAlertActionStyleDefault
+                                               handler:^(UIAlertAction * _Nonnull action) {
+                                                   NSArray *textFieldsArray = alertController.textFields;
+                                                   UITextField *tokenTextField = textFieldsArray[0];
+                                                   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                                   [defaults removeObjectForKey:@"token"];
+                                                   [defaults setObject:tokenTextField.text forKey:@"token"];
+                                                   [self checkToken];
+                                               }];
+    UIAlertAction *logOut = [UIAlertAction actionWithTitle:@"Log Out"
+                                                    style:UIAlertActionStyleDestructive
+                                                  handler:^(UIAlertAction * _Nonnull action) {
+                                                      NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                                      [defaults setBool:NO forKey:@"StaySignedIn"];
+                                                      [defaults removeObjectForKey:@"token"];
+                                                      [self performSegueWithIdentifier:@"LogOutFromFormSegue" sender:self];
+                                                  }];
+    [alertController addAction:logIn];
+    [alertController addAction:logOut];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)tokenErrorAlert {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Boooom"
+                                                                             message:@"Invalid token!"
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK"
+                                                 style:UIAlertActionStyleDefault
+                                               handler:^(UIAlertAction * _Nonnull action) {
+                                                   [self changedTokenErrorAlert];
+                                               }];
+    [alertController addAction:ok];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)connectionErrorAlert {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Boooom"
+                                                                             message:@"Connection problem!"
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK"
+                                                 style:UIAlertActionStyleDefault
+                                               handler:^(UIAlertAction * _Nonnull action) {
+                                                   [self changedTokenErrorAlert];
+                                               }];
+    [alertController addAction:ok];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
