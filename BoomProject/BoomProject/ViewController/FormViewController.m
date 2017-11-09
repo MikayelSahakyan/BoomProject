@@ -65,7 +65,7 @@
 
 #pragma mark - API
 
-- (void)loadFormsWithCompletion:(void (^)())completion {
+- (void)loadFormsWithCompletion:(void (^)(void))completion {
     NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"token"];
     [[ServiceManager sharedManager] getFormsWithUserToken:token
                                                 onSuccess:^(id result) {

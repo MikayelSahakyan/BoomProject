@@ -10,12 +10,12 @@
 #import "ServiceObject+CoreDataClass.h"
 #import "DataManager.h"
 
-static NSString *const kHostLoginURL = @"https://api.boomform.com/login/";
-static NSString *const kHostGetFormsURL = @"https://api.boomform.com/get_forms/";
-static NSString *const kHostGetSubmissionsURL = @"https://api.boomform.com/get_submissions/";
-static NSString *const kHostUpdateEntryURL = @"https://api.boomform.com/update_entry/";
-static NSString *const kHostRemoveEntryURL = @"https://api.boomform.com/remove_entry/";
-static NSString *const kHostLogOutURL = @"https://api.boomform.com/logout/";
+static NSString *const kHostLoginURL = @"https://api.boomte.ch/login/";
+static NSString *const kHostGetFormsURL = @"https://api.boomte.ch/get_forms/";
+static NSString *const kHostGetSubmissionsURL = @"https://api.boomte.ch/get_submissions/";
+static NSString *const kHostUpdateEntryURL = @"https://api.boomte.ch/update_entry/";
+static NSString *const kHostRemoveEntryURL = @"https://api.boomte.ch/remove_entry/";
+static NSString *const kHostLogOutURL = @"https://api.boomte.ch/logout/";
 
 @implementation ServiceManager
 

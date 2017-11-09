@@ -1,8 +1,9 @@
-source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '8.0'
+platform :ios, '9.0'
 
-target “BoomProject” do
-   pod 'AFNetworking', '~> 3.0'
-   pod 'Firebase/Core'
-   pod 'Firebase/Messaging'
+target 'BoomProject' do
+
+  pod 'AFNetworking', '~> 3.0’
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'
+
 end

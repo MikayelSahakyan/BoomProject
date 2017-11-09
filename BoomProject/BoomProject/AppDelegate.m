@@ -23,7 +23,7 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
     [[UIApplication sharedApplication] registerForRemoteNotifications];
     
     [FIRApp configure];
-    [FIRMessaging messaging].remoteMessageDelegate = self;
+    [FIRMessaging messaging].delegate = self;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tokenRefreshNotification:)
                                                  name:kFIRInstanceIDTokenRefreshNotification object:nil];
 
@@ -49,7 +49,7 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    [[FIRMessaging messaging] disconnect];
+    [[FIRMessaging messaging] setShouldEstablishDirectChannel:NO];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -59,7 +59,7 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     NSLog(@"APNs token retrieved: %@", deviceToken);
     // With swizzling disabled you must set the APNs token here.
-    [[FIRInstanceID instanceID] setAPNSToken:deviceToken type:FIRInstanceIDAPNSTokenTypeProd];
+    [[FIRMessaging messaging] setAPNSToken:deviceToken type:FIRMessagingAPNSTokenTypeProd];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
@@ -102,7 +102,7 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
 // Handle notification messages after display notification is tapped by the user.
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
 didReceiveNotificationResponse:(UNNotificationResponse *)response
-         withCompletionHandler:(void (^)())completionHandler {
+         withCompletionHandler:(void (^)(void))completionHandler {
     NSDictionary *userInfo = response.notification.request.content.userInfo;
     if (userInfo[kGCMMessageIDKey]) {
         NSLog(@"Message ID: %@", userInfo[kGCMMessageIDKey]);
@@ -150,8 +150,16 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     
     // Disconnect previous FCM connection if it exists.
-    [[FIRMessaging messaging] disconnect];
+    [[FIRMessaging messaging] setShouldEstablishDirectChannel:NO];
     
+    if ([[FIRMessaging messaging] isDirectChannelEstablished]) {
+        NSLog(@"Connected to FCM.");
+    } else {
+        NSLog(@"Unable to connect to FCM.");
+    }
+    
+    
+    /*
     [[FIRMessaging messaging] connectWithCompletion:^(NSError * _Nullable error) {
         if (error != nil) {
             NSLog(@"Unable to connect to FCM. %@", error);
@@ -159,6 +167,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             NSLog(@"Connected to FCM.");
         }
     }];
+     */
 }
 
 @end

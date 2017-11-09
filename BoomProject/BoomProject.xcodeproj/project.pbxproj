@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		339B67358E4DCAC275F7A423 /* libPods-BoomProject.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63458ACBD414A61E94B9DFDB /* libPods-BoomProject.a */; };
 		4004EF1A1E802DFA00483C57 /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4004EF191E802DFA00483C57 /* DataManager.m */; };
 		4005F2BD1E65F6D80022BAB2 /* EntriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005F2B21E65F6D80022BAB2 /* EntriesViewController.m */; };
 		4005F2BE1E65F6D80022BAB2 /* EntryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005F2B41E65F6D80022BAB2 /* EntryViewController.m */; };
@@ -17,7 +16,6 @@
 		4005F2CA1E65F6F40022BAB2 /* EntriesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005F2C51E65F6F40022BAB2 /* EntriesTableViewCell.m */; };
 		4005F2CB1E65F6F40022BAB2 /* EntryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005F2C71E65F6F40022BAB2 /* EntryTableViewCell.m */; };
 		4005F2CC1E65F6F40022BAB2 /* FormTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005F2C91E65F6F40022BAB2 /* FormTableViewCell.m */; };
-		400A673A1ED0D9DE0092437A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 400A67391ED0D9DE0092437A /* GoogleService-Info.plist */; };
 		40104D951E5B077900688B2F /* ServiceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 40104D941E5B077900688B2F /* ServiceManager.m */; };
 		4042DB601EB8BB1A00927A5E /* RowEditingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4042DB5F1EB8BB1A00927A5E /* RowEditingViewController.m */; };
 		40E516611E8E5D7E0045F20C /* Form+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E516521E8E5D7E0045F20C /* Form+CoreDataClass.m */; };
@@ -34,6 +32,8 @@
 		40F9A8E91E3A12F3002D1219 /* BoomProject.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 40F9A8E71E3A12F3002D1219 /* BoomProject.xcdatamodeld */; };
 		40F9A8EB1E3A12F3002D1219 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40F9A8EA1E3A12F3002D1219 /* Assets.xcassets */; };
 		40F9A8EE1E3A12F3002D1219 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40F9A8EC1E3A12F3002D1219 /* LaunchScreen.storyboard */; };
+		43E393791FB4965900F8BBB2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 43E393781FB4965900F8BBB2 /* GoogleService-Info.plist */; };
+		8B1A95118ED6FA6AA5C661F7 /* libPods-BoomProject.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40B60C92BB30393B4D75690F /* libPods-BoomProject.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,12 +56,12 @@
 		4005F2C81E65F6F40022BAB2 /* FormTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormTableViewCell.h; sourceTree = "<group>"; };
 		4005F2C91E65F6F40022BAB2 /* FormTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormTableViewCell.m; sourceTree = "<group>"; };
 		400A67381ED0D6F50092437A /* BoomProject.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BoomProject.entitlements; sourceTree = "<group>"; };
-		400A67391ED0D9DE0092437A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40104D931E5B077900688B2F /* ServiceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceManager.h; sourceTree = "<group>"; };
 		40104D941E5B077900688B2F /* ServiceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceManager.m; sourceTree = "<group>"; };
 		4042DB5B1EB75B4100927A5E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4042DB5E1EB8BB1A00927A5E /* RowEditingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RowEditingViewController.h; sourceTree = "<group>"; };
 		4042DB5F1EB8BB1A00927A5E /* RowEditingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RowEditingViewController.m; sourceTree = "<group>"; };
+		40B60C92BB30393B4D75690F /* libPods-BoomProject.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BoomProject.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		40E516511E8E5D7E0045F20C /* Form+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Form+CoreDataClass.h"; sourceTree = "<group>"; };
 		40E516521E8E5D7E0045F20C /* Form+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Form+CoreDataClass.m"; sourceTree = "<group>"; };
 		40E516531E8E5D7E0045F20C /* Form+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Form+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -87,9 +87,9 @@
 		40F9A8EA1E3A12F3002D1219 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		40F9A8ED1E3A12F3002D1219 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		40F9A8EF1E3A12F3002D1219 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		63458ACBD414A61E94B9DFDB /* libPods-BoomProject.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BoomProject.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		CAB56724C070352C068DE274 /* Pods-BoomProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BoomProject.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BoomProject/Pods-BoomProject.debug.xcconfig"; sourceTree = "<group>"; };
-		E8C5435DE152BD3259FB1A8A /* Pods-BoomProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BoomProject.release.xcconfig"; path = "Pods/Target Support Files/Pods-BoomProject/Pods-BoomProject.release.xcconfig"; sourceTree = "<group>"; };
+		43E393781FB4965900F8BBB2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A65A89C69D32FF006EAC6BBE /* Pods-BoomProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BoomProject.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BoomProject/Pods-BoomProject.debug.xcconfig"; sourceTree = "<group>"; };
+		E43306E267B51DED26FD5F53 /* Pods-BoomProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BoomProject.release.xcconfig"; path = "Pods/Target Support Files/Pods-BoomProject/Pods-BoomProject.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,7 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				339B67358E4DCAC275F7A423 /* libPods-BoomProject.a in Frameworks */,
+				8B1A95118ED6FA6AA5C661F7 /* libPods-BoomProject.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,8 +164,8 @@
 			children = (
 				40F9A8DA1E3A12F3002D1219 /* BoomProject */,
 				40F9A8D91E3A12F3002D1219 /* Products */,
-				CB40FB3FEE02661D8C52EEF7 /* Pods */,
 				9585A7F51FCFD800C5E81078 /* Frameworks */,
+				C97FEB67A20E27E67717F5B1 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -192,8 +192,8 @@
 				4004EF191E802DFA00483C57 /* DataManager.m */,
 				40F9A8E41E3A12F3002D1219 /* Main.storyboard */,
 				40F9A8EA1E3A12F3002D1219 /* Assets.xcassets */,
+				43E393781FB4965900F8BBB2 /* GoogleService-Info.plist */,
 				40F9A8EC1E3A12F3002D1219 /* LaunchScreen.storyboard */,
-				400A67391ED0D9DE0092437A /* GoogleService-Info.plist */,
 				40F9A8EF1E3A12F3002D1219 /* Info.plist */,
 				40F9A8E71E3A12F3002D1219 /* BoomProject.xcdatamodeld */,
 				40F9A8DB1E3A12F3002D1219 /* Supporting Files */,
@@ -213,16 +213,16 @@
 			isa = PBXGroup;
 			children = (
 				4042DB5B1EB75B4100927A5E /* SystemConfiguration.framework */,
-				63458ACBD414A61E94B9DFDB /* libPods-BoomProject.a */,
+				40B60C92BB30393B4D75690F /* libPods-BoomProject.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		CB40FB3FEE02661D8C52EEF7 /* Pods */ = {
+		C97FEB67A20E27E67717F5B1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				CAB56724C070352C068DE274 /* Pods-BoomProject.debug.xcconfig */,
-				E8C5435DE152BD3259FB1A8A /* Pods-BoomProject.release.xcconfig */,
+				A65A89C69D32FF006EAC6BBE /* Pods-BoomProject.debug.xcconfig */,
+				E43306E267B51DED26FD5F53 /* Pods-BoomProject.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -234,12 +234,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 40F9A8F21E3A12F4002D1219 /* Build configuration list for PBXNativeTarget "BoomProject" */;
 			buildPhases = (
-				08C65034B78C1F576594008D /* [CP] Check Pods Manifest.lock */,
+				8C5E819D1C238868D1750504 /* [CP] Check Pods Manifest.lock */,
 				40F9A8D41E3A12F3002D1219 /* Sources */,
 				40F9A8D51E3A12F3002D1219 /* Frameworks */,
 				40F9A8D61E3A12F3002D1219 /* Resources */,
-				99C45854603DA6D1B66C8FCD /* [CP] Embed Pods Frameworks */,
-				96B479017F7737782A6C03A0 /* [CP] Copy Pods Resources */,
+				62915AD64A3DA260B9669DFA /* [CP] Embed Pods Frameworks */,
+				45BCFA2768E4BB4574C64025 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -256,7 +256,7 @@
 		40F9A8D01E3A12F3002D1219 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = "Mikayel Sahakyan";
 				TargetAttributes = {
 					40F9A8D71E3A12F3002D1219 = {
@@ -295,7 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				40F9A8EE1E3A12F3002D1219 /* LaunchScreen.storyboard in Resources */,
-				400A673A1ED0D9DE0092437A /* GoogleService-Info.plist in Resources */,
+				43E393791FB4965900F8BBB2 /* GoogleService-Info.plist in Resources */,
 				40F9A8EB1E3A12F3002D1219 /* Assets.xcassets in Resources */,
 				40F9A8E61E3A12F3002D1219 /* Main.storyboard in Resources */,
 			);
@@ -304,22 +304,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		08C65034B78C1F576594008D /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		96B479017F7737782A6C03A0 /* [CP] Copy Pods Resources */ = {
+		45BCFA2768E4BB4574C64025 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -334,7 +319,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BoomProject/Pods-BoomProject-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		99C45854603DA6D1B66C8FCD /* [CP] Embed Pods Frameworks */ = {
+		62915AD64A3DA260B9669DFA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -347,6 +332,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BoomProject/Pods-BoomProject-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8C5E819D1C238868D1750504 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BoomProject-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -412,7 +415,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -420,7 +425,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -459,7 +468,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -467,7 +478,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -493,7 +508,7 @@
 		};
 		40F9A8F31E3A12F4002D1219 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CAB56724C070352C068DE274 /* Pods-BoomProject.debug.xcconfig */;
+			baseConfigurationReference = A65A89C69D32FF006EAC6BBE /* Pods-BoomProject.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BoomProject/BoomProject.entitlements;
@@ -511,7 +526,7 @@
 		};
 		40F9A8F41E3A12F4002D1219 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E8C5435DE152BD3259FB1A8A /* Pods-BoomProject.release.xcconfig */;
+			baseConfigurationReference = E43306E267B51DED26FD5F53 /* Pods-BoomProject.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BoomProject/BoomProject.entitlements;

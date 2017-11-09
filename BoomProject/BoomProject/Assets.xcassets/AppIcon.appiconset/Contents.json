@@ -49,6 +49,12 @@
       "scale" : "3x"
     },
     {
+      "size" : "1024x1024",
+      "idiom" : "ios-marketing",
+      "filename" : "BoomIcon@1x-1.png",
+      "scale" : "1x"
+    },
+    {
       "size" : "24x24",
       "idiom" : "watch",
       "filename" : "Watch_38mm_notif@2x.png",
@@ -101,6 +107,12 @@
       "scale" : "2x",
       "role" : "quickLook",
       "subtype" : "42mm"
+    },
+    {
+      "size" : "1024x1024",
+      "idiom" : "watch-marketing",
+      "filename" : "BoomIcon@1x.png",
+      "scale" : "1x"
     }
   ],
   "info" : {
