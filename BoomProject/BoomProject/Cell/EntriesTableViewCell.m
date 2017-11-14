@@ -26,6 +26,7 @@
 }
 
 - (void)prepareForReuse {
+    [super prepareForReuse];
     self.nameLabel.text = @"";
     self.nameValueLabel.text = @"";
     self.emailLabel.text = @"";

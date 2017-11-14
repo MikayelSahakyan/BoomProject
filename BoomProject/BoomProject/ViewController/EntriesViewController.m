@@ -103,7 +103,7 @@
                                                   }];
 }
 
-- (void)updateEntriesWithCompletion:(void (^)())completion {
+- (void)updateEntriesWithCompletion:(void (^)(void))completion {
     [[ServiceManager sharedManager] updateEntriesWithUserToken:self.token
                                                fromCurrentForm:self.form
                                                    lastEntryID:0
